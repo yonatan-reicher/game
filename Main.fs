@@ -1,63 +1,44 @@
-﻿open Browser
-open Browser.Types
-open FSharp.Data.UnitSystems.SI.UnitSymbols
+﻿open FSharp.Data.UnitSystems.SI.UnitSymbols
 
-type Canvas = HTMLCanvasElement
-type CanvasContext = CanvasRenderingContext2D
+open Rendering
+open Time
 
-let FloatWithMeasure = LanguagePrimitives.FloatWithMeasure
-
-[<Measure>]
-type frame
-
-[<Measure>]
-type ms
-
-let msInS: int<ms/s> = 1000<ms/s>
-let sInMs: float<s/ms> = 1. / FloatWithMeasure (float msInS)
-
-module Canvas = 
-    let canvas = document.createElement("canvas") :?> Canvas
-    let context = canvas.getContext("2d") :?> CanvasContext
-    let updateSize (canvas: Canvas) =
-        canvas.width <- window.innerWidth
-        canvas.height <- window.innerHeight
-
-    do
-        updateSize canvas
-
-    let initialize init tick draw =
-        let state = ref init
-
-        // Set up draw loop
-        let rec drawWrapper () =
-            draw state.Value context
-            window.requestAnimationFrame (fun _ -> drawWrapper ())
-            |> ignore
-        drawWrapper ()
-
-        // Set up tick loop
-        let frameRate = 60<frame/s>
-        window.setInterval((fun _ -> state.Value <- tick state.Value),
-                           int(msInS / frameRate)) |> ignore
-
-        // Set up resize listener
-        window.addEventListener("resize", fun _ -> updateSize canvas)
-
-        // Append canvas to body
-        document.body.appendChild(canvas) |> ignore
+type State =
+    { Player: Player.Player 
+      Camera: Camera.Camera }
 
 
-type State = State of string
+let init = { Player = Player.init ()
+             Camera = Camera.init }
 
-let init = State "a"
 
-let tick = function
-    | State s -> State (s + "a")
+let constrainCameraToPlayer (state: State) =
+    { state with Camera = { state.Camera with Position = state.Player.Position } }
+
+
+let tick (state: State) ({ Delta = delta } as ft: FrameTime) =
+    { Player = Player.tick state.Player ft 
+      Camera = state.Camera }
+    |> constrainCameraToPlayer
+
 
 let draw (state: State) (context: CanvasContext) =
-    match state with
-    | State s -> context.fillText(s, 10., 10.)
+    let w = float context.canvas.width
+    let h = float context.canvas.height
+    context.clearRect (-0.5 * w , -0.5 * h, w, h)
+    Camera.apply state.Camera context <| fun context -> (
+        // Just a simple grid
+        context.fillRect(-1, -1000, 2, 2000)
+        context.fillRect(-1000, -1, 2000, 2)
+        Player.draw state.Player context
+    )
 
-Canvas.initialize init tick draw
 
+let state = ref init
+Rendering.setup { Draw = draw; State = state }
+
+
+Time.setup
+    { FrameRate = 60.0f<frame / s>
+      Tick = tick
+      State = state }

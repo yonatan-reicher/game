@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Math.Vector.fs" />
+    <Compile Include="Math.fs" />
+    <Compile Include="Input.fs" />
+    <Compile Include="Time.fs" />
+    <Compile Include="Rendering.fs" />
+    <Compile Include="Camera.fs" />
+    <Compile Include="Player.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
 
