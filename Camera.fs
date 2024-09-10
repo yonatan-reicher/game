@@ -45,3 +45,20 @@ let screenToWorld (camera: Camera) (context: Rendering.CanvasContext) : vec2<px>
         * zoom
         + camera.Position
         |> rotateAroundPoint camera.Position camera.Rotation
+
+
+let worldToScreen (camera: Camera) (context: Rendering.CanvasContext) : vec2<m> -> vec2<px> =
+    let w = 1f<px> * float32 context.canvas.width
+    let h = 1f<px> * float32 context.canvas.height
+
+    fun (world: vec2<m>) ->
+        // TODO: Change if we ever add zoom.
+        let zoom = 1.0f<m / px>
+        world
+        |> rotateAroundPoint camera.Position (-camera.Rotation)
+        |> fun p -> p - camera.Position
+        |> fun p -> p / zoom
+        |> fun p -> { X = p.X + 0.5f * w
+                      Y = 0.5f * h - p.Y }
+
+

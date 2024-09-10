@@ -16,6 +16,7 @@ type Vec2<[<Measure>] 'a> =
     static member (*) (a: float32<'b>, b: Vec2<'a>) = { X = a * b.X; Y = a * b.Y }
     static member (*) (a: Vec2<'a>, b: float32<'b>) = { X = a.X * b; Y = a.Y * b }
     static member (*) (a: Vec2<'a>, b: Vec2<'b>) = { X = a.X * b.X; Y = a.Y * b.Y }
+    static member (/) (a: Vec2<'a>, b: float32<'b>) = { X = a.X / b; Y = a.Y / b }
 
 
 type vec2<[<Measure>] 'a> = Vec2<'a>
