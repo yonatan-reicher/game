@@ -2,6 +2,8 @@ module Input
 
 open Browser
 
+open Maths
+
 [<Struct>]
 type Key =
     | AltLeft
@@ -382,3 +384,31 @@ window.onmousemove <-
 
 let isKeyDown (key: Key) = keys.[keyToInt key]
 let getMousePosition () = mouse
+
+
+type InputConfig<'state> =
+    { State: 'state ref
+      OnMouseDown: Maths.vec2<Maths.px> -> 'state -> 'state
+      OnMouseUp: Maths.vec2<Maths.px> -> 'state -> 'state }
+
+
+let setup
+    ({ State = state
+       OnMouseDown = onMouseDown
+       OnMouseUp = onMouseUp }: InputConfig<'state>)
+    =
+    window.onmousedown <-
+        fun e ->
+            let pos =
+                { X = 1f<Maths.px> * float32 e.clientX
+                  Y = 1f<Maths.px> * float32 e.clientY }
+
+            state.Value <- onMouseDown pos state.Value
+
+    window.onmouseup <-
+        fun e ->
+            let pos =
+                { X = 1f<Maths.px> * float32 e.clientX
+                  Y = 1f<Maths.px> * float32 e.clientY }
+
+            state.Value <- onMouseUp pos state.Value

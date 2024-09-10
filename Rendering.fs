@@ -46,3 +46,4 @@ let setup ({ Draw = draw; State = state }: RenderingOptions<'state>) =
     document.body.style.overflow <- "hidden"
 
 let getCanvas () = canvas
+let getContext () = context

@@ -2,17 +2,6 @@ module Maths.Vector
 
 let private Float32WithMeasure = LanguagePrimitives.Float32WithMeasure
 
-type Vec2<[<Measure>] 'a> =
-    { X: float32<'a>
-      Y: float32<'a> }
-
-    static member (+)(a: Vec2<'a>, b: Vec2<'a>) = { X = a.X + b.X; Y = a.Y + b.Y }
-
-    static member (-)(a: Vec2<'a>, b: Vec2<'a>) = { X = a.X - b.X; Y = a.Y - b.Y }
-
-    static member (*) (a: float32<'b>, b: Vec2<'a>) = { X = a * b.X; Y = a * b.Y }
-    static member (*) (a: Vec2<'a>, b: float32<'b>) = { X = a.X * b; Y = a.Y * b }
-
 
 let scale (b: float32<'b>) (a: Vec2<'a>) = a * b
 
@@ -47,3 +36,15 @@ let length (v: Vec2<'a>): float32<'a> = System.MathF.Sqrt (sqrLength v |> float3
 let normalize (v: Vec2<'a>): Vec2<1> =
     if sqrLength v = 0.0f<_> then zero
     else scale (1.0f / length v) v
+
+let angle (v: Vec2<'a>): float32<rad> = atan2 v.Y v.X
+let fromAngle (angle: float32<rad>): Vec2<1> =
+    { X = cos angle
+      Y = sin angle }
+      
+
+let rotate (angle: float32<rad>) (v: Vec2<'a>): Vec2<'a> =
+    let cosA = cos angle
+    let sinA = sin angle
+    { X = cosA * v.X - sinA * v.Y
+      Y = sinA * v.X + cosA * v.Y }
