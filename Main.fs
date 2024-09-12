@@ -23,11 +23,12 @@ let constrainCameraToPlayer (state: State) =
                 Position = state.Player.Position } }
 
 
-let tick (state: State) ({ Delta = delta } as ft: FrameTime) =
+let tick (state: State) ({ Delta = delta } as ft: Frame) =
     { Player = Player.tick state.Player ft
       Bullets = List.map (Bullet.tick ft) state.Bullets
       Camera = state.Camera }
     |> constrainCameraToPlayer
+//  |> fun s -> { s with Camera = { s.Camera with Width = Time.getElapsed() * 300f<m/s> + float32 (getCanvas ()).width * 1f<m> } }
 // |> fun s -> { s with Camera = { s.Camera with Rotation = s.Camera.Rotation + 0.001f<rad> } }
 
 

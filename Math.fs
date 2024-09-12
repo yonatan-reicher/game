@@ -59,3 +59,5 @@ let asin (x: float32): float32<rad> = asin (float32 x) |> Float32WithMeasure
 let acos (x: float32): float32<rad> = acos (float32 x) |> Float32WithMeasure
 let atan (x: float32): float32<rad> = atan (float32 x) |> Float32WithMeasure
 let atan2 (y: float32<'a>) (x: float32<'a>): float32<rad> = atan2 (float32 y) (float32 x) |> Float32WithMeasure
+
+let lerp (a: float32<'a>) (b: float32<'a>) (t: float32) = a + (b - a) * t

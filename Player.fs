@@ -9,6 +9,7 @@ open Maths
 type Player = { Position: vec2<m> }
 
 let speed = 100.0f<m / s>
+let radius = 10.0f<m>
 
 let init () =
     (*
@@ -19,13 +20,13 @@ let init () =
     { Position = vec2 (1f<m> * float32 x) (1f<m> * float32 y) }
 
 let draw ({ Position = pos }: Player) (context: Rendering.CanvasContext) =
-    let r = 10.0<m>
+    let r = radius
     context.fillStyle <- U3.Case1 "black"
     context.beginPath ()
     context.ellipse (float pos.X, float pos.Y, float r, float r, 0.0, 0.0, 2.0 * System.Math.PI)
     context.fill ()
 
-let tick ({ Position = pos } as player: Player) ({ Delta = delta }: Time.FrameTime) : Player =
+let tick ({ Position = pos } as player: Player) ({ Delta = delta }: Time.Frame) : Player =
     let anyDown list = List.exists Input.isKeyDown list
 
     let moveH =
@@ -45,6 +46,9 @@ let tick ({ Position = pos } as player: Player) ({ Delta = delta }: Time.FrameTi
             Vector.zero
 
     let move = Vector.normalize (moveH + moveV)
+    let target = Vector.sqrLength move
+    Time.timeScale.Value <- lerp Time.timeScale.Value target 0.09f
+    printfn "%f" Time.timeScale.Value
 
     { player with
         Position = pos + (speed * delta * move) }

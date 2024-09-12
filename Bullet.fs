@@ -11,7 +11,7 @@ type Bullet =
 let move (bullet: Bullet) (move: vec2<meter>): Bullet =
     { bullet with Position = bullet.Position + move }
 
-let tick (tick: Time.FrameTime) (bullet: Bullet): Bullet =
+let tick (tick: Time.Frame) (bullet: Bullet): Bullet =
     let positionDiff = bullet.Speed * tick.Delta * Vector.fromAngle bullet.Angle
     move bullet positionDiff
 

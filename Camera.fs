@@ -4,22 +4,44 @@ open Maths
 
 type Camera =
     { Position: vec2<meter>
-      Rotation: float32<rad> }
+      Rotation: float32<rad>
+      Width: float32<meter> }
 
 
 let init =
     { Position = Vector.zero
-      Rotation = 0.0f<rad> }
+      Rotation = 0.0f<rad>
+      Width = 500.0f<m> }
+
+
+let height { Width = w } (context: Rendering.CanvasContext): float32<meter> =
+    let scale = w / float32 context.canvas.width
+    scale * float32 context.canvas.height
+
+
+let metersPerPixel ({Width = width}: Camera) (context: Rendering.CanvasContext): float32<meter / px> =
+    let pixels = float32 context.canvas.width * 1f<px>
+    // For example, in a 500m wide camera, 1000 pixel screen, you have 0.5m per pixel.
+    width / pixels
+
+
+let private scaleAtCenter (camera: Camera) scale (context: Rendering.CanvasContext) =
+    let w = float context.canvas.width
+    let h = float context.canvas.height
+    context.translate (-0.5 * w, -0.5 * h)
+    context.scale (scale, scale)
+    context.translate (0.5 * float camera.Width, 0.5 * float (height camera context))
 
 
 let apply (camera: Camera) (context: Rendering.CanvasContext) cont =
     context.save ()
-    // Go to the position.
-    context.translate (-float camera.Position.X, -float camera.Position.Y)
+    // Scale to the camera width.
+    let scale = context.canvas.width / float camera.Width
+    scaleAtCenter camera scale context
     // Go to camera rotation.
     context.rotate (-float camera.Rotation)
-    // Offset the center of the canvas to the center of the camera.
-    // context.translate (float context.canvas.width / 2.0, float context.canvas.height / 2.0)
+    // Go to the position.
+    context.translate (-float camera.Position.X, -float camera.Position.Y)
     // Run
     cont context
     // Reset the canvas.
@@ -37,12 +59,9 @@ let screenToWorld (camera: Camera) (context: Rendering.CanvasContext) : vec2<px>
     let h = 1f<px> * float32 context.canvas.height
 
     fun (screen: vec2<px>) ->
-        // TODO: Change if we ever add zoom.
-        let zoom = 1.0f<m / px>
-
         { X = screen.X - 0.5f * w
           Y = 0.5f * h - screen.Y }
-        * zoom
+        * metersPerPixel camera context
         + camera.Position
         |> rotateAroundPoint camera.Position camera.Rotation
 
@@ -52,13 +71,10 @@ let worldToScreen (camera: Camera) (context: Rendering.CanvasContext) : vec2<m> 
     let h = 1f<px> * float32 context.canvas.height
 
     fun (world: vec2<m>) ->
-        // TODO: Change if we ever add zoom.
-        let zoom = 1.0f<m / px>
         world
         |> rotateAroundPoint camera.Position (-camera.Rotation)
         |> fun p -> p - camera.Position
-        |> fun p -> p / zoom
-        |> fun p -> { X = p.X + 0.5f * w
-                      Y = 0.5f * h - p.Y }
-
-
+        |> fun p -> p / metersPerPixel camera context
+        |> fun p ->
+            { X = p.X + 0.5f * w
+              Y = 0.5f * h - p.Y }
