@@ -48,3 +48,12 @@ let rotate (angle: float32<rad>) (v: Vec2<'a>): Vec2<'a> =
     let sinA = sin angle
     { X = cosA * v.X - sinA * v.Y
       Y = sinA * v.X + cosA * v.Y }
+
+
+let moveTo (target: Vec2<'a>) (current: Vec2<'a>) (maxStep: float32<'a>): Vec2<'a> =
+    let diff = target - current
+    let dist = length diff
+    if dist = 0.0f<_> then target
+    else
+        let move = normalize diff
+        current + scale maxStep move
