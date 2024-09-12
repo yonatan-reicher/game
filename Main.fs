@@ -38,7 +38,7 @@ let mouseDown (pos: vec2<px>) (state: State) =
     let bullet: Bullet.Bullet =
         { Position = state.Player.Position
           Angle = Vector.angle (worldPos - state.Player.Position)
-          Speed = 100.0f<m / s> }
+          Speed = 300.0f<m / s> }
 
     { state with
         Bullets = bullet :: state.Bullets }

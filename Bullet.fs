@@ -17,6 +17,12 @@ let tick (tick: Time.Frame) (bullet: Bullet): Bullet =
 
 let draw (bullet: Bullet) (context: Rendering.CanvasContext) =
     context.fillStyle <- Fable.Core.U3.Case1 "red"
+    context.strokeStyle <- Fable.Core.U3.Case1 "red"
+    context.lineWidth <- 10.0
     context.beginPath ()
     context.arc (float bullet.Position.X, float bullet.Position.Y, 5.0, 0.0, 2.0 * System.Math.PI)
     context.fill ()
+    context.beginPath()
+    context.moveTo (float bullet.Position.X, float bullet.Position.Y)
+    context.lineTo (float <| bullet.Position.X - 10f<m> * cos bullet.Angle, float <| bullet.Position.Y - 10f<m> * sin bullet.Angle)
+    context.stroke ()

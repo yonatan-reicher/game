@@ -46,9 +46,10 @@ let tick ({ Position = pos } as player: Player) ({ Delta = delta }: Time.Frame) 
             Vector.zero
 
     let move = Vector.normalize (moveH + moveV)
-    let target = Vector.sqrLength move
-    Time.timeScale.Value <- lerp Time.timeScale.Value target 0.09f
-    printfn "%f" Time.timeScale.Value
+    let timeMove = Vector.sqrLength move <> 0f
+    // Time increases slowly and decreases quickly.
+    if timeMove then Time.timeScale.Value <- lerp Time.timeScale.Value 1.0f 0.05f
+    else Time.timeScale.Value <- lerp Time.timeScale.Value 0.01f 0.15f
 
     { player with
         Position = pos + (speed * delta * move) }
