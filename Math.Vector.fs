@@ -50,6 +50,12 @@ let rotate (angle: float32<rad>) (v: Vec2<'a>): Vec2<'a> =
       Y = sinA * v.X + cosA * v.Y }
 
 
+let rotateAroundPoint (point: vec2<'a>) (angle: float32<rad>) (x: vec2<'a>) : vec2<'a> =
+    let x' = x - point
+    let rotated = rotate angle x'
+    rotated + point
+
+
 let moveTo (target: Vec2<'a>) (current: Vec2<'a>) (maxStep: float32<'a>): Vec2<'a> =
     let diff = target - current
     let dist = length diff

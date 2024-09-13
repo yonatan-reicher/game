@@ -10,8 +10,10 @@ type Vec2<[<Measure>] 'a> =
       Y: float32<'a> }
 
     static member (+)(a: Vec2<'a>, b: Vec2<'a>) = { X = a.X + b.X; Y = a.Y + b.Y }
+    static member (~+)(a: Vec2<'a>) = a
 
     static member (-)(a: Vec2<'a>, b: Vec2<'a>) = { X = a.X - b.X; Y = a.Y - b.Y }
+    static member (~-)(a: Vec2<'a>) = { X = -a.X; Y = -a.Y }
 
     static member (*) (a: float32<'b>, b: Vec2<'a>) = { X = a * b.X; Y = a * b.Y }
     static member (*) (a: Vec2<'a>, b: float32<'b>) = { X = a.X * b; Y = a.Y * b }

@@ -7,11 +7,13 @@ open Maths
 type State =
     { Player: Player.Player
       Bullets: Bullet.Bullet list
-      Camera: Camera.Camera }
+      Camera: Camera.Camera
+      Objects: Prop.Prop list }
 
 
 let init =
     { Player = Player.init ()
+      Objects = []
       Bullets = []
       Camera = Camera.init }
 
@@ -25,6 +27,7 @@ let constrainCameraToPlayer (state: State) =
 
 let tick (state: State) ({ Delta = delta } as ft: Frame) =
     { Player = Player.tick state.Player ft
+      Objects = state.Objects
       Bullets = List.map (Bullet.tick ft) state.Bullets
       Camera = state.Camera }
     |> constrainCameraToPlayer
@@ -45,13 +48,15 @@ let mouseDown (pos: vec2<px>) (state: State) =
 
 
 let draw (state: State) (context: CanvasContext) =
-    let w = float context.canvas.width
-    let h = float context.canvas.height
-    context.clearRect (-0.5 * w, -0.5 * h, w, h)
+    let size = Camera.size state.Camera context
+    let w = float size.X
+    let h = float size.Y
 
     Camera.apply state.Camera context
     <| fun context ->
-        (
+        (// Clearing the screen
+         Rendering.movedTo (state.Camera.Position * 1f</m>) (fun context ->
+             context.clearRect (-0.5 * w, -0.5 * h, w, h)) context
          // Just a simple grid
          context.fillRect (-1, -1000, 2, 2000)
          context.fillRect (-1000, -1, 2000, 2)

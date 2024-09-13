@@ -2,6 +2,7 @@ module Rendering
 
 open Browser
 open Browser.Types
+open Maths
 
 type Canvas = HTMLCanvasElement
 type CanvasContext = CanvasRenderingContext2D
@@ -17,9 +18,9 @@ let private updateSizeAndState (canvas: Canvas) =
     canvas.width <- window.innerWidth
     canvas.height <- window.innerHeight
     // Flip the canvas so Y increases upwards.
-    context.scale(1.0, -1.0)
-    // Offset the start of the canvas to the center of the screen.
-    context.translate (float canvas.width / 2.0, -float canvas.height / 2.0)
+    context.scale (1.0, -1.0)
+    // Offset the start of the canvas to the bottom left.
+    context.translate (0.0, -float canvas.height)
 
 do
     updateSizeAndState canvas
@@ -47,3 +48,39 @@ let setup ({ Draw = draw; State = state }: RenderingOptions<'state>) =
 
 let getCanvas () = canvas
 let getContext () = context
+
+
+let inline flippedX draw (context: CanvasContext) =
+    context.scale (-1, 1)
+    draw context
+    context.scale (-1, 1)
+
+
+let inline flippedY draw (context: CanvasContext) =
+    context.scale (1, -1)
+    draw context
+    context.scale (1, -1)
+
+
+let inline movedTo (point: vec2) draw (context: CanvasContext) =
+    let x, y = float point.X, float point.Y
+    context.translate (x, y)
+    draw context
+    context.translate (-x, -y)
+
+
+let inline rotatedAround point (angle: float32<rad>) draw (context: CanvasContext) =
+    let x, y = float point.X, float point.Y
+    context.save()
+    context.translate (x, y)
+    context.rotate (float angle)
+    context.translate (-x, -y)
+    draw context
+    context.restore()
+
+
+let inline scaled (scale: float32) draw (context: CanvasContext) =
+    context.save()
+    context.scale (float scale, float scale)
+    draw context
+    context.restore()
