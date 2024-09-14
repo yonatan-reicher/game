@@ -10,8 +10,8 @@ type Bullet =
       TrailId: BulletTrail.TrailId }
 
 
-let radius = 0.3f<m>
-let distanceToBack = 0.8f<m>
+let radius = 0.2f<m>
+let distanceToBack = 0.4f<m>
 
 
 let move (bullet: Bullet) (move: vec2<meter>) : Bullet =

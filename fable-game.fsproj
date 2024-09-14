@@ -16,6 +16,7 @@
     <Compile Include="BulletTrail.fs" />
     <Compile Include="Bullet.fs" />
     <Compile Include="Player.fs" />
+    <Compile Include="Prop.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
 

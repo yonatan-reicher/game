@@ -7,12 +7,18 @@ type State =
       Bullets: Bullet.Bullet list
       BulletTrail: BulletTrail.State
       Camera: Camera.Camera
-      Objects: Prop.Prop list }
+      Props: Prop.Prop list }
 
 
 let init =
     { Player = Player.init ()
-      Objects = []
+      Props = [
+          { Position = 1f<m> * vec2 10f 15f
+            Rotation = 1f<rad>
+            Width = 1f<m>
+            Sprite = Prop.Sprite.fromUrl "build/images/chair.png"
+          }
+      ]
       Bullets = []
       BulletTrail = BulletTrail.empty
       Camera = Camera.init }
@@ -71,6 +77,10 @@ let draw (state: State) (context: CanvasContext) =
          // Just a simple grid
          context.fillRect (-0.1, -1000, 0.2, 2000)
          context.fillRect (-1000, -0.1, 2000, 0.2)
+
+         // Draw the state
+         for prop in state.Props do
+             Prop.draw prop context
          Player.draw state.Player context
          List.iter (fun bullet -> Bullet.draw bullet context) state.Bullets
          BulletTrail.draw Bullet.radius state.BulletTrail context
