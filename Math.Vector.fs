@@ -59,7 +59,6 @@ let rotateAroundPoint (point: vec2<'a>) (angle: float32<rad>) (x: vec2<'a>) : ve
 let moveTo (target: Vec2<'a>) (current: Vec2<'a>) (maxStep: float32<'a>): Vec2<'a> =
     let diff = target - current
     let dist = length diff
-    if dist = 0.0f<_> then target
-    else
-        let move = normalize diff
-        current + scale maxStep move
+    let step = min dist maxStep
+    let move = normalize diff
+    current + scale step move

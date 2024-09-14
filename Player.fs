@@ -8,8 +8,8 @@ open Maths
 
 type Player = { Position: vec2<m> }
 
-let speed = 100.0f<m / s>
-let radius = 10.0f<m>
+let speed = 10.0f<m / s>
+let radius = 1f<m>
 
 let init () =
     (*
@@ -26,7 +26,7 @@ let draw ({ Position = pos }: Player) (context: Rendering.CanvasContext) =
     context.ellipse (float pos.X, float pos.Y, float r, float r, 0.0, 0.0, 2.0 * System.Math.PI)
     context.fill ()
 
-let tick ({ Position = pos } as player: Player) ({ Delta = delta }: Time.Frame) : Player =
+let tick ({ Position = pos } as player: Player) (frame: Time.Frame) : Player =
     let anyDown list = List.exists Input.isKeyDown list
 
     let moveH =
@@ -48,8 +48,8 @@ let tick ({ Position = pos } as player: Player) ({ Delta = delta }: Time.Frame) 
     let move = Vector.normalize (moveH + moveV)
     let timeMove = Vector.sqrLength move <> 0f
     // Time increases slowly and decreases quickly.
-    if timeMove then Time.timeScale.Value <- lerp Time.timeScale.Value 1.0f 0.05f
-    else Time.timeScale.Value <- moveTo 0.01f Time.timeScale.Value (delta * 10f</s>)
+    if timeMove then Time.timeScale.Value <- moveTo 1f Time.timeScale.Value (frame.UnscaledDelta / 2f<s>)
+    else Time.timeScale.Value <- moveTo 0.01f Time.timeScale.Value (frame.UnscaledDelta * 10f</s>)
 
     { player with
-        Position = pos + (speed * delta * move) }
+        Position = pos + (speed * frame.Delta * move) }

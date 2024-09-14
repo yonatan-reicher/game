@@ -68,7 +68,6 @@ let lerp (a: float32<'a>) (b: float32<'a>) (t: float32) = a + (b - a) * t
 let moveTo (target: float32<'a>) (current: float32<'a>) (maxStep: float32<'a>): float32<'a> =
     let diff = target - current
     let dist = abs diff
-    if dist = 0.0f<_> then target
-    else
-        let move = float32 <| sign diff
-        current + (maxStep * move)
+    let step = min dist maxStep
+    let move = float32 <| sign diff
+    current + (step * move)

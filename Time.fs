@@ -19,6 +19,10 @@ type Frame =
         /// This is the amount of time to simulate between each simulation step.
         /// Note: This is *not* the actual time between frames.
         Delta: float32<s>
+        /// This is the amout of time that would have passed between frames if
+        /// the game was running at perfect fps. 
+        /// UnscaledDelta = Delta / Time.timeScale
+        UnscaledDelta: float32<s>
     }
 
 type TimeConfig<'state> =
@@ -49,7 +53,7 @@ let setup
        State = state }: _ TimeConfig)
     =
 
-    let delta = 1.0f / frameRate
+    let unscaledDelta = 1.0f / frameRate
 
     let onInterval (_) =
 
@@ -59,8 +63,9 @@ let setup
         frames.Value <- frames.Value + 1
 
         if not paused.Value then
-            let frameData: Frame = { Delta = delta * timeScale.Value * 1f<frame> }
+            let frameData: Frame = { Delta = unscaledDelta * timeScale.Value * 1f<frame>
+                                     UnscaledDelta = unscaledDelta * 1f<frame> }
             state.Value <- tick state.Value frameData
-            elapsed.Value <- elapsed.Value + delta * 1f<frame>
+            elapsed.Value <- elapsed.Value + unscaledDelta * 1f<frame> * timeScale.Value
 
     window.setInterval (onInterval, int (msInS / frameRate)) |> ignore

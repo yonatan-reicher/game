@@ -11,7 +11,7 @@ type Camera =
 let init =
     { Position = Vector.zero
       Rotation = 0.0f<rad>
-      Width = 500.0f<m> }
+      Width = 50.0f<m> }
 
 
 let height { Width = w } (context: Rendering.CanvasContext) : float32<meter> =

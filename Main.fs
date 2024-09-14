@@ -50,7 +50,7 @@ let mouseDown (pos: vec2<px>) (state: State) =
     let bullet: Bullet.Bullet =
         { Position = state.Player.Position
           Angle = Vector.angle (worldPos - state.Player.Position)
-          Speed = 300.0f<m / s>
+          Speed = 60.0f<m / s>
           TrailId = BulletTrail.newTrail () }
 
     { state with
@@ -69,8 +69,8 @@ let draw (state: State) (context: CanvasContext) =
             (fun context -> context.clearRect (-0.5 * w, -0.5 * h, w, h))
             context
          // Just a simple grid
-         context.fillRect (-1, -1000, 2, 2000)
-         context.fillRect (-1000, -1, 2000, 2)
+         context.fillRect (-0.1, -1000, 0.2, 2000)
+         context.fillRect (-1000, -0.1, 2000, 0.2)
          Player.draw state.Player context
          List.iter (fun bullet -> Bullet.draw bullet context) state.Bullets
          BulletTrail.draw Bullet.radius state.BulletTrail context
@@ -82,7 +82,7 @@ let draw (state: State) (context: CanvasContext) =
 
          context.fillStyle <- Fable.Core.U3.Case1 "red"
          context.beginPath ()
-         context.ellipse (float x.X, float x.Y, 5.0, 5.0, 0.0, 0.0, 2.0 * System.Math.PI)
+         context.ellipse (float x.X, float x.Y, 0.5, 0.5, 0.0, 0.0, 2.0 * System.Math.PI)
          context.fill ())
 
 
