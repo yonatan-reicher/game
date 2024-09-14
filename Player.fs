@@ -1,6 +1,5 @@
 module Player
 
-open FSharp.Data.UnitSystems.SI.UnitSymbols
 open Fable.Core
 
 open Maths
