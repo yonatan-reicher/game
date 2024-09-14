@@ -5,6 +5,7 @@ module Maths
 
 let private Float32WithMeasure = LanguagePrimitives.Float32WithMeasure
 
+[<Struct>]
 type Vec2<[<Measure>] 'a> =
     { X: float32<'a>
       Y: float32<'a> }

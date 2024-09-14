@@ -13,6 +13,7 @@
     <Compile Include="Time.fs" />
     <Compile Include="Rendering.fs" />
     <Compile Include="Camera.fs" />
+    <Compile Include="BulletTrail.fs" />
     <Compile Include="Bullet.fs" />
     <Compile Include="Player.fs" />
     <Compile Include="Main.fs" />

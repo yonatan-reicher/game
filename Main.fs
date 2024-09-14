@@ -1,12 +1,11 @@
-﻿open FSharp.Data.UnitSystems.SI.UnitSymbols
-
-open Rendering
+﻿open Rendering
 open Time
 open Maths
 
 type State =
     { Player: Player.Player
       Bullets: Bullet.Bullet list
+      BulletTrail: BulletTrail.State
       Camera: Camera.Camera
       Objects: Prop.Prop list }
 
@@ -15,6 +14,7 @@ let init =
     { Player = Player.init ()
       Objects = []
       Bullets = []
+      BulletTrail = BulletTrail.empty
       Camera = Camera.init }
 
 
@@ -25,11 +25,20 @@ let constrainCameraToPlayer (state: State) =
                 Position = state.Player.Position } }
 
 
+let doTrails (state: State) : State =
+    { state with
+        BulletTrail =
+            BulletTrail.tick
+                { PlayerPosition = state.Player.Position
+                  State = state.BulletTrail
+                  BulletPositions = seq { for b in state.Bullets -> (b.TrailId, Bullet.backPosition b) } } }
+
+
 let tick (state: State) ({ Delta = delta } as ft: Frame) =
-    { Player = Player.tick state.Player ft
-      Objects = state.Objects
-      Bullets = List.map (Bullet.tick ft) state.Bullets
-      Camera = state.Camera }
+    { state with
+        Player = Player.tick state.Player ft
+        Bullets = List.map (Bullet.tick ft) state.Bullets }
+    |> doTrails
     |> constrainCameraToPlayer
 //  |> fun s -> { s with Camera = { s.Camera with Width = Time.getElapsed() * 300f<m/s> + float32 (getCanvas ()).width * 1f<m> } }
 // |> fun s -> { s with Camera = { s.Camera with Rotation = s.Camera.Rotation + 0.001f<rad> } }
@@ -41,7 +50,8 @@ let mouseDown (pos: vec2<px>) (state: State) =
     let bullet: Bullet.Bullet =
         { Position = state.Player.Position
           Angle = Vector.angle (worldPos - state.Player.Position)
-          Speed = 300.0f<m / s> }
+          Speed = 300.0f<m / s>
+          TrailId = BulletTrail.newTrail () }
 
     { state with
         Bullets = bullet :: state.Bullets }
@@ -54,14 +64,16 @@ let draw (state: State) (context: CanvasContext) =
 
     Camera.apply state.Camera context
     <| fun context ->
-        (// Clearing the screen
-         Rendering.movedTo (state.Camera.Position * 1f</m>) (fun context ->
-             context.clearRect (-0.5 * w, -0.5 * h, w, h)) context
+        (Rendering.movedTo // Clearing the screen
+            (state.Camera.Position * 1f< / m>)
+            (fun context -> context.clearRect (-0.5 * w, -0.5 * h, w, h))
+            context
          // Just a simple grid
          context.fillRect (-1, -1000, 2, 2000)
          context.fillRect (-1000, -1, 2000, 2)
          Player.draw state.Player context
          List.iter (fun bullet -> Bullet.draw bullet context) state.Bullets
+         BulletTrail.draw Bullet.radius state.BulletTrail context
 
 
          // Draw the mouse for debugging.
