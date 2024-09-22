@@ -1,5 +1,6 @@
 ﻿open Rendering
 open Time
+open Game
 open Maths
 
 type State =
@@ -7,7 +8,9 @@ type State =
       Bullets: Bullet.Bullet list
       BulletTrail: BulletTrail.State
       Camera: Camera.Camera
-      Props: Prop.Prop list }
+      Props: Prop.Prop list
+      Enemies: Enemy list
+    }
 
 
 let init =
@@ -21,7 +24,10 @@ let init =
       ]
       Bullets = []
       BulletTrail = BulletTrail.empty
-      Camera = Camera.init }
+      Camera = Camera.init 
+      Enemies = [
+          Enemy.initAt (vec2 2f<m> 3f<m>)
+        ] }
 
 
 let constrainCameraToPlayer (state: State) =
@@ -43,7 +49,8 @@ let doTrails (state: State) : State =
 let tick (state: State) ({ Delta = delta } as ft: Frame) =
     { state with
         Player = Player.tick state.Player ft
-        Bullets = List.map (Bullet.tick ft) state.Bullets }
+        Bullets = List.map (Bullet.tick ft) state.Bullets
+        Enemies = List.map (Enemy.tick ft state.Player.Position) state.Enemies }
     |> doTrails
     |> constrainCameraToPlayer
 //  |> fun s -> { s with Camera = { s.Camera with Width = Time.getElapsed() * 300f<m/s> + float32 (getCanvas ()).width * 1f<m> } }
@@ -84,6 +91,7 @@ let draw (state: State) (context: CanvasContext) =
          Player.draw state.Player context
          List.iter (fun bullet -> Bullet.draw bullet context) state.Bullets
          BulletTrail.draw Bullet.radius state.BulletTrail context
+         List.iter (fun enemy -> Enemy.draw enemy context) state.Enemies
 
 
          // Draw the mouse for debugging.

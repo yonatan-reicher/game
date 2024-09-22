@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Math.fs" />
-    <Compile Include="Math.Vector.fs" />
+    <Compile Include="Maths.fs" />
+    <Compile Include="Maths.Vector.fs" />
     <Compile Include="Input.fs" />
     <Compile Include="Time.fs" />
     <Compile Include="Rendering.fs" />
@@ -16,6 +16,7 @@
     <Compile Include="BulletTrail.fs" />
     <Compile Include="Bullet.fs" />
     <Compile Include="Player.fs" />
+    <Compile Include="Game.Enemy.fs" />
     <Compile Include="Prop.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
