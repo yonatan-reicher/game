@@ -13,7 +13,9 @@
     <Compile Include="Time.fs" />
     <Compile Include="Rendering.fs" />
     <Compile Include="Camera.fs" />
+    <Compile Include="Sprite.fs" />
     <Compile Include="BulletTrail.fs" />
+    <Compile Include="Game.State.fs" />
     <Compile Include="Bullet.fs" />
     <Compile Include="Player.fs" />
     <Compile Include="Game.Enemy.fs" />

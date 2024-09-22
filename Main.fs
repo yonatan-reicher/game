@@ -3,23 +3,13 @@ open Time
 open Game
 open Maths
 
-type State =
-    { Player: Player.Player
-      Bullets: Bullet.Bullet list
-      BulletTrail: BulletTrail.State
-      Camera: Camera.Camera
-      Props: Prop.Prop list
-      Enemies: Enemy list
-    }
-
-
 let init =
     { Player = Player.init ()
       Props = [
           { Position = 1f<m> * vec2 10f 15f
             Rotation = 1f<rad>
             Width = 1f<m>
-            Sprite = Prop.Sprite.fromUrl "build/images/chair.png"
+            Sprite = Sprite.Sprite.fromUrl "build/images/chair.png"
           }
       ]
       Bullets = []
@@ -60,7 +50,7 @@ let tick (state: State) ({ Delta = delta } as ft: Frame) =
 let mouseDown (pos: vec2<px>) (state: State) =
     let worldPos = Camera.screenToWorld state.Camera (getContext ()) pos
 
-    let bullet: Bullet.Bullet =
+    let bullet: Bullet =
         { Position = state.Player.Position
           Angle = Vector.angle (worldPos - state.Player.Position)
           Speed = 60.0f<m / s>

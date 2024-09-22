@@ -1,13 +1,7 @@
 module Bullet
 
 open Maths
-
-
-type Bullet =
-    { Position: vec2<meter>
-      Angle: float32<rad>
-      Speed: float32<meter / second>
-      TrailId: BulletTrail.TrailId }
+open Game
 
 
 let radius = 0.2f<m>

@@ -3,9 +3,8 @@ module Player
 open Fable.Core
 
 open Maths
+open Game
 
-
-type Player = { Position: vec2<m> }
 
 let speed = 10.0f<m / s>
 let radius = 0.6f<m>
@@ -47,8 +46,10 @@ let tick ({ Position = pos } as player: Player) (frame: Time.Frame) : Player =
     let move = Vector.normalize (moveH + moveV)
     let timeMove = Vector.sqrLength move <> 0f
     // Time increases slowly and decreases quickly.
-    if timeMove then Time.timeScale.Value <- moveTo 1f Time.timeScale.Value (frame.UnscaledDelta / 1f<s>)
-    else Time.timeScale.Value <- moveTo 0.01f Time.timeScale.Value (frame.UnscaledDelta * 10f</s>)
+    if timeMove then
+        Time.timeScale.Value <- moveTo 1f Time.timeScale.Value (frame.UnscaledDelta / 1f<s>)
+    else
+        Time.timeScale.Value <- moveTo 0.01f Time.timeScale.Value (frame.UnscaledDelta * 10f< / s>)
 
     { player with
         Position = pos + (speed * frame.Delta * move) }
