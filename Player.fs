@@ -49,7 +49,7 @@ let tick ({ Position = pos } as player: Player) (frame: Time.Frame) : Player =
     if timeMove then
         Time.timeScale.Value <- moveTo 1f Time.timeScale.Value (frame.UnscaledDelta / 1f<s>)
     else
-        Time.timeScale.Value <- moveTo 0.01f Time.timeScale.Value (frame.UnscaledDelta * 10f< / s>)
+        Time.timeScale.Value <- moveTo 0.007f Time.timeScale.Value (frame.UnscaledDelta * 10f< / s>)
 
     { player with
         Position = pos + (speed * frame.Delta * move) }
