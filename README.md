@@ -30,11 +30,11 @@ API that requires you to side-effect to draw.
 - [ ] Pure and functional rendering
 - [ ] Pure and functional time scaling
 - [ ] Melee enemies
-- [ ] Delete bullet rendering and replace trails with bullet animations
 - [ ] Try making a level
 - [ ] A minimal level loader
 - [ ] Look into automatic serialization
 - [ ] Add a sound effect
+- [x] Delete bullet trail rendering and replace trails with bullet animations
 - [x] Camera zoom
 - [x] Change timescale according to player movement
 - [x] Redo Time.fs to fix timesteps and allow time scaling, and pausing, and filling lost frames, but only up to some threshold

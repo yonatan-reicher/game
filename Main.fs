@@ -11,9 +11,14 @@ let init =
             Width = 1f<m>
             Sprite = Sprite.Sprite.fromUrl "build/images/chair.png" } ]
       Bullets = []
-      BulletTrail = BulletTrail.empty
       Camera = Camera.init
-      Enemies = [ Enemy.initAt (vec2 2f<m> 3f<m>) ] }
+      Enemies =
+        [ Enemy.initAt (vec2 2f<m> 3f<m>)
+          Enemy.initAt (vec2 5f<m> -1f<m>)
+          Enemy.initAt (vec2 -2f<m> -2f<m>)
+
+          Enemy.initAt (vec2 4f<m> 9f<m>)
+          Enemy.initAt (vec2 2f<m> -7f<m>) ] }
 
 
 let mouseDown (pos: vec2<px>) (state: State) =
@@ -24,7 +29,9 @@ let mouseDown (pos: vec2<px>) (state: State) =
           Angle = Vector.angle (worldPos - state.Player.Position)
           Speed = 60.0f<m / s>
           State = Moving
-          TrailId = BulletTrail.newTrail () }
+          Trail = BulletTrail.emptyTrail }
+
+    Time.timeScale.Value <- 1f
 
     { state with
         Bullets = bullet :: state.Bullets }
@@ -51,7 +58,6 @@ let draw (state: State) (context: CanvasContext) =
 
          Player.draw state.Player context
          List.iter (fun bullet -> Bullet.draw bullet context) state.Bullets
-         BulletTrail.draw Bullet.radius state.BulletTrail context
          List.iter (fun enemy -> Enemy.draw enemy context) state.Enemies
 
 

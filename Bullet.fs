@@ -18,10 +18,9 @@ let private move (bullet: Bullet) (move: vec2<meter>) : Bullet =
 let spawnAt pos angle : Bullet =
     { Position = pos
       Angle = angle
-      Speed = defaultSpeed 
+      Speed = defaultSpeed
       State = Moving
-      TrailId = BulletTrail.newTrail()
-    }
+      Trail = BulletTrail.emptyTrail }
 
 
 /// Makes the bullet not hit anything until exiting it's current collision.
@@ -38,10 +37,14 @@ let backPosition (bullet: Bullet) : vec2<meter> =
 
 let tick (tick: Time.Frame) (bullet: Bullet) : Bullet =
     let positionDiff = bullet.Speed * tick.Delta * Vector.fromAngle bullet.Angle
+
     move bullet positionDiff
+    |> fun b ->
+        { b with
+            Trail = BulletTrail.tick b.Position b.Trail }
 
 
-let draw (bullet: Bullet) (context: Rendering.CanvasContext) =
+let drawBulletBody (bullet: Bullet) (context: Rendering.CanvasContext) =
     context.fillStyle <- Fable.Core.U3.Case1 "red"
     context.strokeStyle <- Fable.Core.U3.Case1 "red"
     context.lineWidth <- float (2f * radius)
@@ -57,3 +60,8 @@ let draw (bullet: Bullet) (context: Rendering.CanvasContext) =
     )
 
     context.stroke ()
+
+
+let draw (bullet: Bullet) (context: Rendering.CanvasContext) =
+    drawBulletBody bullet context
+    BulletTrail.draw radius bullet.Trail context

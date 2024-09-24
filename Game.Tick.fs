@@ -11,15 +11,6 @@ let constrainCameraToPlayer (state: State) =
                 Position = state.Player.Position } }
 
 
-let doTrails (state: State) : State =
-    { state with
-        BulletTrail =
-            BulletTrail.tick
-                { PlayerPosition = state.Player.Position
-                  State = state.BulletTrail
-                  BulletPositions = seq { for b in state.Bullets -> (b.TrailId, Bullet.backPosition b) } } }
-
-
 type Hits =
     { Hit: (Bullet * Enemy) list
       EnemiesNotHit: Enemy list
@@ -93,7 +84,7 @@ let private enemiesTick (ft: Time.Frame) (state: State) =
 
 
 let tick (state: State) (ft: Time.Frame) =
-    state |> enemiesTick ft |> doBulletHits ft |> doTrails
+    state |> enemiesTick ft |> doBulletHits ft
 // |> constrainCameraToPlayer
 //  |> fun s -> { s with Camera = { s.Camera with Width = Time.getElapsed() * 300f<m/s> + float32 (getCanvas ()).width * 1f<m> } }
 // |> fun s -> { s with Camera = { s.Camera with Rotation = s.Camera.Rotation + 0.001f<rad> } }

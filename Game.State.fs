@@ -17,7 +17,7 @@ type Bullet =
       Angle: float32<rad>
       Speed: float32<m/s>
       State: BulletState
-      TrailId: BulletTrail.TrailId }
+      Trail: BulletTrail.Trail }
 
 
 type Enemy =
@@ -35,7 +35,6 @@ type Prop =
 type State =
     { Player: Player
       Bullets: Bullet list
-      BulletTrail: BulletTrail.State
       Camera: Camera.Camera
       Props: Prop list
       Enemies: Enemy list }
