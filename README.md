@@ -4,15 +4,15 @@ This is just me testing to see how good is fable for making games!
 
 ## Game Design
 
-My idea right now is to make a top-down 2d Super Hot. So - time only moves when
-you more bullet hell!
+My idea right now is to make a top-down 2d Super Hot. So - time-only-moves-when
+you-move bullet hell!
 This fits good with the limitations of canvas graphics and not having a game
 engine
 
 ## Technical Design
 
 The game is split into very isolated modules that each exposes minimal things
-that allow you to interact with it. Most modules will be pure and functional,
+that allow you to interact with them. Most modules will be pure and functional,
 allowing composability and easy testing!
 
 Even game engine stuff will be modulerized and isolated, as much as possible.
@@ -25,6 +25,16 @@ API that requires you to side-effect to draw.
 ## TODO
 
 - [ ] Get a sprite for the player (Make sure to draw it flipped!)
+- [ ] Try making pixelart just to try a vibe for the game
+- [ ] Camera Shake
+- [ ] Pure and functional rendering
+- [ ] Pure and functional time scaling
+- [ ] Melee enemies
+- [ ] Delete bullet rendering and replace trails with bullet animations
+- [ ] Try making a level
+- [ ] A minimal level loader
+- [ ] Look into automatic serialization
+- [ ] Add a sound effect
 - [x] Camera zoom
 - [x] Change timescale according to player movement
 - [x] Redo Time.fs to fix timesteps and allow time scaling, and pausing, and filling lost frames, but only up to some threshold
