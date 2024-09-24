@@ -81,7 +81,7 @@ let doBulletHits (ft: Time.Frame) : State -> State =
             Enemies = enemies }
 
 
-let tick (state: State) (ft: Time.Frame) =
+let private enemiesTick (ft: Time.Frame) (state: State) =
     List.map (Enemy.tick ft state.Player.Position) state.Enemies
     |> List.unzip
     |> mapSnd (List.choose id)
@@ -90,8 +90,10 @@ let tick (state: State) (ft: Time.Frame) =
             Player = Player.tick state.Player ft
             Bullets = List.map (Bullet.tick ft) state.Bullets @ newBullets
             Enemies = enemies }
-    |> doBulletHits ft
-    |> doTrails
+
+
+let tick (state: State) (ft: Time.Frame) =
+    state |> enemiesTick ft |> doBulletHits ft |> doTrails
 // |> constrainCameraToPlayer
 //  |> fun s -> { s with Camera = { s.Camera with Width = Time.getElapsed() * 300f<m/s> + float32 (getCanvas ()).width * 1f<m> } }
 // |> fun s -> { s with Camera = { s.Camera with Rotation = s.Camera.Rotation + 0.001f<rad> } }
