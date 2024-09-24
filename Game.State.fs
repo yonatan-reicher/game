@@ -8,7 +8,7 @@ type Player = { Position: vec2<m> }
 
 
 type BulletState =
-    | ExitingShooter
+    | ExitingCollision
     | Moving
 
 

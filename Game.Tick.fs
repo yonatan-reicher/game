@@ -28,7 +28,7 @@ type Hits =
 
 let changeExitingToMoving: Bullet -> Bullet =
     function
-    | { State = ExitingShooter } as b -> { b with State = Moving }
+    | { State = ExitingCollision } as b -> { b with State = Moving }
     | b -> b
 
 
@@ -60,7 +60,7 @@ let doBulletHits (ft: Time.Frame) : State -> State =
     let shouldBeIgnored: Bullet * Enemy -> bool =
         function
         | ({ State = Moving }, _) -> false
-        | ({ State = ExitingShooter }, _) -> true
+        | ({ State = ExitingCollision }, _) -> true
 
     fun state ->
         let hits = getHits state

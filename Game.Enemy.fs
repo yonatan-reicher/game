@@ -23,18 +23,17 @@ module Enemy =
         { enemy with Position = position }
 
 
+    let private makeBullet pos targetPos : Bullet =
+        let bulletAngle = Vector.angle (targetPos - pos)
+        Bullet.spawnAt pos bulletAngle |> Bullet.ignoreCurrentCollision
+
+
     let private shootIfCan at : Enemy -> Enemy * Bullet option =
         fun enemy ->
             if enemy.ShootDelay > 0f<s> then
                 enemy, None
             else
-                { enemy with ShootDelay = 5f<s> },
-                Some
-                    { Position = enemy.Position
-                      Angle = Vector.angle (at - enemy.Position)
-                      Speed = 10f<m / s>
-                      State = ExitingShooter
-                      TrailId = BulletTrail.newTrail () }
+                { enemy with ShootDelay = 5f<s> }, Some(makeBullet enemy.Position at)
 
 
     let private decreaseDelay (ft: Time.Frame) enemy =

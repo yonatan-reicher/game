@@ -6,11 +6,30 @@ open Game
 
 let radius = 0.2f<m>
 let distanceToBack = 0.4f<m>
+let defaultSpeed = 60f<m / s>
 
 
-let move (bullet: Bullet) (move: vec2<meter>) : Bullet =
+let private move (bullet: Bullet) (move: vec2<meter>) : Bullet =
     { bullet with
         Position = bullet.Position + move }
+
+
+/// Spawns a bullet at the given position and angle with default parameters.
+let spawnAt pos angle : Bullet =
+    { Position = pos
+      Angle = angle
+      Speed = defaultSpeed 
+      State = Moving
+      TrailId = BulletTrail.newTrail()
+    }
+
+
+/// Makes the bullet not hit anything until exiting it's current collision.
+/// NOTE: This actually just makes it wait until it has no collision before
+/// hitting
+/// TODO: Address the note above!
+let ignoreCurrentCollision: Bullet -> Bullet =
+    fun b -> { b with State = ExitingCollision }
 
 
 let backPosition (bullet: Bullet) : vec2<meter> =
