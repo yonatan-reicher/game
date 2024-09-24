@@ -7,10 +7,16 @@ open Sprite
 type Player = { Position: vec2<m> }
 
 
+type BulletState =
+    | ExitingShooter
+    | Moving
+
+
 type Bullet =
     { Position: vec2<m>
       Angle: float32<rad>
       Speed: float32<m/s>
+      State: BulletState
       TrailId: BulletTrail.TrailId }
 
 

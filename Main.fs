@@ -5,46 +5,15 @@ open Maths
 
 let init =
     { Player = Player.init ()
-      Props = [
-          { Position = 1f<m> * vec2 10f 15f
+      Props =
+        [ { Position = 1f<m> * vec2 10f 15f
             Rotation = 1f<rad>
             Width = 1f<m>
-            Sprite = Sprite.Sprite.fromUrl "build/images/chair.png"
-          }
-      ]
+            Sprite = Sprite.Sprite.fromUrl "build/images/chair.png" } ]
       Bullets = []
       BulletTrail = BulletTrail.empty
-      Camera = Camera.init 
-      Enemies = [
-          Enemy.initAt (vec2 2f<m> 3f<m>)
-        ] }
-
-
-let constrainCameraToPlayer (state: State) =
-    { state with
-        Camera =
-            { state.Camera with
-                Position = state.Player.Position } }
-
-
-let doTrails (state: State) : State =
-    { state with
-        BulletTrail =
-            BulletTrail.tick
-                { PlayerPosition = state.Player.Position
-                  State = state.BulletTrail
-                  BulletPositions = seq { for b in state.Bullets -> (b.TrailId, Bullet.backPosition b) } } }
-
-
-let tick (state: State) ({ Delta = delta } as ft: Frame) =
-    { state with
-        Player = Player.tick state.Player ft
-        Bullets = List.map (Bullet.tick ft) state.Bullets
-        Enemies = List.map (Enemy.tick ft state.Player.Position) state.Enemies }
-    |> doTrails
-    |> constrainCameraToPlayer
-//  |> fun s -> { s with Camera = { s.Camera with Width = Time.getElapsed() * 300f<m/s> + float32 (getCanvas ()).width * 1f<m> } }
-// |> fun s -> { s with Camera = { s.Camera with Rotation = s.Camera.Rotation + 0.001f<rad> } }
+      Camera = Camera.init
+      Enemies = [ Enemy.initAt (vec2 2f<m> 3f<m>) ] }
 
 
 let mouseDown (pos: vec2<px>) (state: State) =
@@ -54,6 +23,7 @@ let mouseDown (pos: vec2<px>) (state: State) =
         { Position = state.Player.Position
           Angle = Vector.angle (worldPos - state.Player.Position)
           Speed = 60.0f<m / s>
+          State = Moving
           TrailId = BulletTrail.newTrail () }
 
     { state with
@@ -78,6 +48,7 @@ let draw (state: State) (context: CanvasContext) =
          // Draw the state
          for prop in state.Props do
              Prop.draw prop context
+
          Player.draw state.Player context
          List.iter (fun bullet -> Bullet.draw bullet context) state.Bullets
          BulletTrail.draw Bullet.radius state.BulletTrail context
@@ -100,7 +71,7 @@ Rendering.setup { Draw = draw; State = state }
 
 Time.setup
     { FrameRate = 60.0f<frame / s>
-      Tick = tick
+      Tick = Tick.tick
       State = state }
 
 

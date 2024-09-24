@@ -1,6 +1,7 @@
 namespace Game
 
 open Maths
+open Util
 
 
 module Enemy =
@@ -22,13 +23,18 @@ module Enemy =
         { enemy with Position = position }
 
 
-    let private shootIfCan enemy =
-        if enemy.ShootDelay > 0f<s> then
-            enemy
-        else
-            // Shoot
-            printfn "Shoot!"
-            { enemy with ShootDelay = 5f<s> }
+    let private shootIfCan at : Enemy -> Enemy * Bullet option =
+        fun enemy ->
+            if enemy.ShootDelay > 0f<s> then
+                enemy, None
+            else
+                { enemy with ShootDelay = 5f<s> },
+                Some
+                    { Position = enemy.Position
+                      Angle = Vector.angle (at - enemy.Position)
+                      Speed = 10f<m / s>
+                      State = ExitingShooter
+                      TrailId = BulletTrail.newTrail () }
 
 
     let private decreaseDelay (ft: Time.Frame) enemy =
@@ -36,5 +42,5 @@ module Enemy =
             ShootDelay = enemy.ShootDelay - ft.Delta }
 
 
-    let tick (ft: Time.Frame) targetPos enemy =
-        enemy |> moveToAimAt ft targetPos |> shootIfCan |> decreaseDelay ft
+    let tick (ft: Time.Frame) targetPos : Enemy -> Enemy * Bullet option =
+        moveToAimAt ft targetPos >> shootIfCan targetPos >> mapFst (decreaseDelay ft)
