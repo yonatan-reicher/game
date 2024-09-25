@@ -34,6 +34,7 @@ API that requires you to side-effect to draw.
 - [ ] A minimal level loader
 - [ ] Look into automatic serialization
 - [ ] Add a sound effect
+- [ ] Lighting
 - [x] Delete bullet trail rendering and replace trails with bullet animations
 - [x] Camera zoom
 - [x] Change timescale according to player movement

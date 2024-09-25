@@ -26,10 +26,9 @@ module List =
 
 module Seq =
     let rec tryTail (s: 'T seq) : 'T seq option =
-        if Seq.isEmpty s then None
-        else Some(Seq.tail s)
+        if Seq.isEmpty s then None else Some(Seq.tail s)
 
-    (* Maybe this should be called truncSkip?
+(* Maybe this should be called truncSkip?
     let rec trySkip (n: int) (s: 'T seq) : 'T seq =
         if n <= 0 || Seq.isEmpty s then
             s
