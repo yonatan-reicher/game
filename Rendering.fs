@@ -27,6 +27,8 @@ do
     canvas.style.position <- "absolute"
     canvas.style.top <- "0"
     canvas.style.left <- "0"
+    canvas.style.setProperty ("image-rendering", "pixelated")
+    canvas.setAttribute ("imageSmoothingEnabled", "false")
 
 /// Sets up the canvas and starts a drawing loop that happens on
 /// every frame.

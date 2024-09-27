@@ -1,6 +1,14 @@
 module Util
 
 
+let inline (|Positive|Zero|Negative|) x =
+    let s = sign x
+
+    if s > 0 then Positive
+    elif s < 0 then Negative
+    else Zero
+
+
 let mapFst (f: 'a -> 'b) (pair: 'a * 'c) : 'b * 'c = (f (fst pair), snd pair)
 
 

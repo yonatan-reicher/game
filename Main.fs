@@ -33,8 +33,15 @@ let mouseDown (pos: vec2<px>) (state: State) =
 
     Time.timeScale.Value <- 1f
 
+    let dir =
+        if (worldPos - state.Player.Position).X > 0f<_> then
+            Right
+        else
+            Left
+
     { state with
-        Bullets = bullet :: state.Bullets }
+        Bullets = bullet :: state.Bullets
+        Player = { state.Player with Direction = dir } }
 
 
 let draw (state: State) (context: CanvasContext) =
