@@ -17,7 +17,7 @@ module Enemy =
 
 
     let private moveToAimAt (ft: Time.Frame) targetPos (enemy: Enemy) =
-        let desiredDis = 4f<m>
+        let desiredDis = 8f<m>
         let speed = 4f<m / s>
         let dir = (targetPos - enemy.Position) |> Vector.normalize
         let desiredPosition = targetPos - dir * desiredDis

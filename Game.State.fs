@@ -9,6 +9,7 @@ type Direction =
     | Left
     | Right
 
+
 // TODO: Move this away
 module Direction =
     let inline fromSign x =
@@ -25,6 +26,20 @@ module Direction =
         function
         | Left -> false
         | Right -> true
+
+
+type Chip =
+    | SlowdownField
+    | HomingBullets
+    | MovementSpeed
+
+
+// TODO: Move this away
+module Chip =
+    module SlowdownField =
+        let radius = 3f<m>
+        let radiusSqr = radius * radius
+        let slowdown = 0.5f
 
 
 [<RequireQualifiedAccess>]
@@ -69,4 +84,7 @@ type State =
       Bullets: Bullet list
       Camera: Camera.Camera
       Props: Prop list
+      // The equiped chips. Not inside the player structure because we could
+      // for example have the game inside a shop menu or something like that.
+      Chips: Chip list
       Enemies: Enemy list }

@@ -45,7 +45,13 @@ let draw
     let r = radius
     context.fillStyle <- U3.Case1 "black"
     let sprite = stateSprite state |> if Direction.isLeft dir then Sprite.flipX else id
-    Sprite.draw pos (2f * r) 0f<_> sprite context
+
+    Sprite.draw
+        { Position = pos
+          Width = 2f * r
+          Rotation = 0f<_> }
+        sprite
+        context
 (*
     context.beginPath ()
     context.ellipse (float pos.X, float pos.Y, float r, float r, 0.0, 0.0, 2.0 * System.Math.PI)
@@ -56,8 +62,8 @@ let draw
 let advanceFrame frame array = (frame + 1) % Array.length array
 
 
-let private advanceState (tryingToWalk: bool) (ft: Time.Frame) =
-    let initialFrameDelay = 0.1f<s>
+let private advanceState (tryingToWalk: bool) (ft: Time.Frame) : PlayerState -> PlayerState =
+    let initialFrameDelay = 0.07f<s>
 
     let idle = PlayerState.Idle
 
@@ -76,7 +82,7 @@ let private advanceState (tryingToWalk: bool) (ft: Time.Frame) =
                 idle
 
 
-let tick ({ Position = pos } as player: Player) (ft: Time.Frame) : Player =
+let tick chips ({ Position = pos } as player: Player) (ft: Time.Frame) : Player =
     let anyDown list = List.exists Input.isKeyDown list
 
     let moveH =
@@ -96,14 +102,28 @@ let tick ({ Position = pos } as player: Player) (ft: Time.Frame) : Player =
             Vector.zero
 
     let move = Vector.normalize (moveH + moveV)
-    let timeMove = Vector.sqrLength move <> 0f
+    let isMoving = Vector.sqrLength move <> 0f
     // Time increases slowly and decreases quickly.
-    if timeMove then
+    if isMoving then
         Time.timeScale.Value <- moveTo 1f Time.timeScale.Value (ft.UnscaledDelta / 1f<s>)
     else
         Time.timeScale.Value <- moveTo 0.007f Time.timeScale.Value (ft.UnscaledDelta * 10f< / s>)
 
+    // Speed is modified by MovementSpeed chip
+    let speed' =
+        if
+            List.exists
+                (function
+                | MovementSpeed -> true
+                | _ -> false)
+                chips
+        then
+
+            1.8f * speed
+        else
+            1f * speed
+
     { player with
-        Position = pos + (speed * ft.Delta * move)
+        Position = pos + (speed' * ft.Delta * move)
         Direction = Direction.fromSign move.X |> Option.defaultValue player.Direction
-        State = advanceState timeMove ft player.State }
+        State = advanceState isMoving ft player.State }

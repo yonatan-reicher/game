@@ -48,7 +48,18 @@ module Sprite =
                 context.drawImage (img, -0.5 * w, -0.5 * h, w, h))
 
 
-    let draw (position: vec2<m>) (width: float32<m>) (rotation: float32<rad>) (sprite: Sprite) =
+    type SpriteDrawArgs =
+        { Position: vec2<m>
+          Width: float32<m>
+          Rotation: float32<rad> }
+
+
+    let draw
+        ({ Position = position
+           Width = width
+           Rotation = rotation }: SpriteDrawArgs)
+        (sprite: Sprite)
+        =
         draw' width sprite
         |> if isFlipped sprite then Rendering.flippedX else id
         |> Rendering.flippedY

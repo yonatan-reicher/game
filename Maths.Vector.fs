@@ -5,6 +5,8 @@ let private Float32WithMeasure = LanguagePrimitives.Float32WithMeasure
 
 let scale (b: float32<'b>) (a: Vec2<'a>) = a * b
 
+let dot (a: vec2<'a>) (b: vec2<'b>) = a.X * b.X + a.Y * b.Y
+
 let right<[<Measure>] 'a> : Vec2<'a> =
     { X = Float32WithMeasure 1.0f
       Y = Float32WithMeasure 0.0f }

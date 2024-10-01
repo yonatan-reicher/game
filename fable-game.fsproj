@@ -22,6 +22,7 @@
     <Compile Include="Game.Enemy.fs" />
     <Compile Include="Prop.fs" />
     <Compile Include="Game.Tick.fs" />
+    <Compile Include="Game.Draw.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
 

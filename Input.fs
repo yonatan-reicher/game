@@ -389,13 +389,17 @@ let getMousePosition () = mouse
 type InputConfig<'state> =
     { State: 'state ref
       OnMouseDown: Maths.vec2<Maths.px> -> 'state -> 'state
-      OnMouseUp: Maths.vec2<Maths.px> -> 'state -> 'state }
+      OnMouseUp: Maths.vec2<Maths.px> -> 'state -> 'state
+      OnKeyDown: Key -> 'state -> 'state
+      OnKeyUp: Key -> 'state -> 'state }
 
 
 let setup
     ({ State = state
        OnMouseDown = onMouseDown
-       OnMouseUp = onMouseUp }: InputConfig<'state>)
+       OnMouseUp = onMouseUp
+       OnKeyUp = onKeyUp
+       OnKeyDown = onKeyDown }: InputConfig<'state>)
     =
     window.onmousedown <-
         fun e ->
@@ -412,3 +416,23 @@ let setup
                   Y = 1f<Maths.px> * float32 e.clientY }
 
             state.Value <- onMouseUp pos state.Value
+
+    let old = window.onkeyup
+
+    window.onkeyup <-
+        fun e ->
+            old e
+
+            e.code
+            |> stringToKey
+            |> Option.iter (fun key -> state.Value <- onKeyUp key state.Value)
+
+    let old = window.onkeydown
+
+    window.onkeydown <-
+        fun e ->
+            old e
+
+            e.code
+            |> stringToKey
+            |> Option.iter (fun key -> state.Value <- onKeyDown key state.Value)

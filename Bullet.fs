@@ -6,7 +6,7 @@ open Game
 
 let radius = 0.2f<m>
 let distanceToBack = 0.4f<m>
-let defaultSpeed = 60f<m / s>
+let defaultSpeed = 50f<m / s>
 
 
 let private move (bullet: Bullet) (move: vec2<meter>) : Bullet =
@@ -35,8 +35,9 @@ let backPosition (bullet: Bullet) : vec2<meter> =
     bullet.Position - distanceToBack * Vector.fromAngle bullet.Angle
 
 
-let tick (tick: Time.Frame) (bullet: Bullet) : Bullet =
-    let positionDiff = bullet.Speed * tick.Delta * Vector.fromAngle bullet.Angle
+let tick (tick: Time.Frame) (slowdown: float32) (bullet: Bullet) : Bullet =
+    let positionDiff =
+        slowdown * bullet.Speed * tick.Delta * Vector.fromAngle bullet.Angle
 
     move bullet positionDiff
     |> fun b ->

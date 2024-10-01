@@ -2,6 +2,7 @@
 open Time
 open Game
 open Maths
+open Util
 
 let init =
     { Player = Player.init ()
@@ -18,7 +19,8 @@ let init =
           Enemy.initAt (vec2 -2f<m> -2f<m>)
 
           Enemy.initAt (vec2 4f<m> 9f<m>)
-          Enemy.initAt (vec2 2f<m> -7f<m>) ] }
+          Enemy.initAt (vec2 2f<m> -7f<m>) ]
+      Chips = [] }
 
 
 let mouseDown (pos: vec2<px>) (state: State) =
@@ -44,38 +46,24 @@ let mouseDown (pos: vec2<px>) (state: State) =
         Player = { state.Player with Direction = dir } }
 
 
-let draw (state: State) (context: CanvasContext) =
-    let size = Camera.size state.Camera context
-    let w = float size.X
-    let h = float size.Y
-
-    Camera.apply state.Camera context
-    <| fun context ->
-        (Rendering.movedTo // Clearing the screen
-            (state.Camera.Position * 1f< / m>)
-            (fun context -> context.clearRect (-0.5 * w, -0.5 * h, w, h))
-            context
-         // Just a simple grid
-         context.fillRect (-0.1, -1000, 0.2, 2000)
-         context.fillRect (-1000, -0.1, 2000, 0.2)
-
-         // Draw the state
-         for prop in state.Props do
-             Prop.draw prop context
-
-         Player.draw state.Player context
-         List.iter (fun bullet -> Bullet.draw bullet context) state.Bullets
-         List.iter (fun enemy -> Enemy.draw enemy context) state.Enemies
+let private toggleChip (chip: Chip) (state: State) = 
+    { state with
+        Chips =
+            match
+                List.tryFindAndRest ((=) chip) state.Chips
+            with
+            | Some(_, rest) -> rest
+            | None -> chip :: state.Chips }
 
 
-         // Draw the mouse for debugging.
-         let x =
-             Camera.screenToWorld state.Camera context (Input.getMousePosition () * 1f<_>)
+let keyUp (key: Input.Key) (state: State) =
+    match key with
+    | Input.Digit1 -> toggleChip SlowdownField state
+    | Input.Digit2 -> toggleChip MovementSpeed state
+    | _ -> state
 
-         context.fillStyle <- Fable.Core.U3.Case1 "red"
-         context.beginPath ()
-         context.ellipse (float x.X, float x.Y, 0.5, 0.5, 0.0, 0.0, 2.0 * System.Math.PI)
-         context.fill ())
+
+let draw (state: State) (context: CanvasContext) = Draw.draw state context
 
 
 let state = ref init
@@ -91,4 +79,6 @@ Time.setup
 Input.setup
     { State = state
       OnMouseDown = mouseDown
-      OnMouseUp = (fun _ -> id) }
+      OnMouseUp = (fun _ -> id)
+      OnKeyUp = keyUp
+      OnKeyDown = (fun _key -> id) }

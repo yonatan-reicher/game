@@ -5,4 +5,8 @@ open Sprite
 
 
 let draw (prop: Prop) =
-    Sprite.draw prop.Position prop.Width prop.Rotation prop.Sprite
+    Sprite.draw
+        { Position = prop.Position
+          Width = prop.Width
+          Rotation = prop.Rotation }
+        prop.Sprite
