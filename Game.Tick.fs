@@ -4,7 +4,7 @@ open Maths
 open Util
 
 
-let constrainCameraToPlayer (state: State) =
+let constrainCameraToPlayer (state: Level) =
     { state with
         Camera =
             { state.Camera with
@@ -62,7 +62,7 @@ module Collision =
         | { State = ExitingCollision } -> true
 
 
-    let private initialHitDetectionState (state: State) : HitDetectionState =
+    let private initialHitDetectionState (state: Level) : HitDetectionState =
         { EnemiesLeft = state.Enemies
           BulletsLeft = state.Bullets
           Hits =
@@ -121,7 +121,7 @@ module Collision =
             | Some bullet, state -> mapHits (fun h -> { h with PlayerHit = Some bullet }) state
 
 
-    let private allCollisionObjects (state: State) =
+    let private allCollisionObjects (state: Level) =
         collisionObjectFromPlayer state.Player
         :: List.map collisionObjectFromEnemy state.Enemies
 
@@ -144,7 +144,7 @@ module Collision =
     let private finish (state: HitDetectionState) : Hits = state.Hits
 
 
-    let private getHits (state: State) =
+    let private getHits (state: Level) =
         initialHitDetectionState state
         |> iterateEnemies
         |> fun s ->
@@ -155,31 +155,32 @@ module Collision =
         |> finish
 
 
-    let private applyHits (hits: Hits) (state: State) : State =
+    let private applyHits (hits: Hits) (state: Level) : State =
         // TODO: Do something with the enemies that were hit.
 
-        let bullets =
-            (hits.BulletsNotHit |> List.map changeExitingToMoving)
-            @ hits.BulletsHitButIgnored
+        match hits.PlayerHit with
+        | Some _ -> GameOver state
+        | None ->
+            let bullets =
+                (hits.BulletsNotHit |> List.map changeExitingToMoving)
+                @ hits.BulletsHitButIgnored
 
-        { state with
-            Bullets = bullets
-            Enemies = hits.EnemiesNotHit
-            Player =
-                match hits.PlayerHit with
-                | Some _ -> failwithf "Player was hit!"
-                | None -> state.Player }
-
-
-    let doBulletHits (_ft: Time.Frame) (state: State) : State = applyHits (getHits state) state
+            Level
+                { state with
+                    Bullets = bullets
+                    Enemies = hits.EnemiesNotHit
+                    Player = state.Player }
 
 
-let private playerTick (ft: Time.Frame) (state: State) =
+    let doBulletHits (_ft: Time.Frame) (state: Level) : State = applyHits (getHits state) state
+
+
+let private playerTick (ft: Time.Frame) (state: Level) =
     { state with
         Player = Player.tick state.Chips state.Player ft }
 
 
-let private getSlowdown (state: State) (position: vec2<m>) (direction: vec2) : float32 =
+let private getSlowdown (state: Level) (position: vec2<m>) (direction: vec2) : float32 =
     let diff = state.Player.Position - position
 
     (List.exists
@@ -194,7 +195,7 @@ let private getSlowdown (state: State) (position: vec2<m>) (direction: vec2) : f
         | false -> 1f
 
 
-let private bulletsTick (ft: Time.Frame) (state: State) =
+let private bulletsTick (ft: Time.Frame) (state: Level) =
     { state with
         Bullets =
             List.map
@@ -204,7 +205,7 @@ let private bulletsTick (ft: Time.Frame) (state: State) =
                 state.Bullets }
 
 
-let private enemiesTick (ft: Time.Frame) (state: State) =
+let private enemiesTick (ft: Time.Frame) (state: Level) =
     List.map (Enemy.tick ft state.Player.Position) state.Enemies
     |> List.unzip
     |> mapSnd (List.choose id)
@@ -214,9 +215,15 @@ let private enemiesTick (ft: Time.Frame) (state: State) =
             Enemies = enemies }
 
 
-let tick (state: State) (ft: Time.Frame) =
+let tick' (state: Level) (ft: Time.Frame) =
     state
     |> bulletsTick ft
     |> enemiesTick ft
     |> playerTick ft
     |> Collision.doBulletHits ft
+
+
+let tick state (ft: Time.Frame) =
+    match state with
+    | Level l -> tick' l ft
+    | GameOver _ -> state

@@ -79,7 +79,7 @@ type Prop =
       Sprite: Sprite }
 
 
-type State =
+type Level =
     { Player: Player
       Bullets: Bullet list
       Camera: Camera.Camera
@@ -88,3 +88,8 @@ type State =
       // for example have the game inside a shop menu or something like that.
       Chips: Chip list
       Enemies: Enemy list }
+
+
+type State = 
+    | Level of Level
+    | GameOver of Level

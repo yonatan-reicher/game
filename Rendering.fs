@@ -3,6 +3,7 @@ module Rendering
 open Browser
 open Browser.Types
 open Maths
+open Fable.Core
 
 type Canvas = HTMLCanvasElement
 type CanvasContext = CanvasRenderingContext2D
@@ -73,16 +74,87 @@ let inline movedTo (point: vec2) draw (context: CanvasContext) =
 
 let inline rotatedAround point (angle: float32<rad>) draw (context: CanvasContext) =
     let x, y = float point.X, float point.Y
-    context.save()
+    context.save ()
     context.translate (x, y)
     context.rotate (float angle)
     context.translate (-x, -y)
     draw context
-    context.restore()
+    context.restore ()
 
 
 let inline scaled (scale: float32) draw (context: CanvasContext) =
-    context.save()
+    context.save ()
     context.scale (float scale, float scale)
     draw context
-    context.restore()
+    context.restore ()
+
+
+module Text =
+
+    [<RequireQualifiedAccess; Struct>]
+    type Align =
+        | Start
+        | End
+        | Left
+        | Right
+        | Center
+
+
+    let alignToString =
+        function
+        | Align.Start -> "start"
+        | Align.End -> "end"
+        | Align.Left -> "left"
+        | Align.Right -> "right"
+        | Align.Center -> "center"
+
+
+    type Text =
+        { Text: string
+          Font: string
+          TextAlign: Align
+          Size: int
+          Color: U3<string, CanvasGradient, CanvasPattern>
+          MaxWidth: float option }
+
+
+    let inline text (words: string) : Text =
+        { Text = words
+          Font = "monospace"
+          TextAlign = Align.Left
+          Size = 16
+          Color = U3.Case1 "black"
+          MaxWidth = None }
+
+
+    let inline withFont font (text: Text) = { text with Font = font }
+
+
+    let withAlignment alignment (text: Text) = { text with TextAlign = alignment }
+
+
+    let inline withSize size (text: Text) = { text with Size = size }
+
+
+    let inline withColor color (text: Text) = { text with Color = color }
+
+
+    let inline withMaxWidth maxWidth (text: Text) = { text with MaxWidth = Some maxWidth }
+
+
+    let inline draw (text: Text) (context: CanvasContext) =
+        context.font <- sprintf "%dpx %s" text.Size text.Font
+        context.textAlign <- alignToString text.TextAlign
+        context.fillStyle <- text.Color
+
+        flippedY
+            (fun context ->
+                match text.MaxWidth with
+                | None -> context.fillText (text.Text, 0.0, 0.0)
+                | Some maxWidth -> context.fillText (text.Text, 0.0, 0.0, maxWidth))
+            context
+
+
+type Text = Text.Text
+
+let text = Text.text
