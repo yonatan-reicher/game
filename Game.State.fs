@@ -79,11 +79,18 @@ type Prop =
       Sprite: Sprite }
 
 
+type Chest =
+    { Position: vec2<meter>
+      Opened: bool
+      Chip: Chip }
+
+
 type Level =
     { Player: Player
       Bullets: Bullet list
       Camera: Camera.Camera
       Props: Prop list
+      Chests: Chest list
       // The equiped chips. Not inside the player structure because we could
       // for example have the game inside a shop menu or something like that.
       Chips: Chip list

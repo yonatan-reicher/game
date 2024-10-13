@@ -19,13 +19,11 @@ let private drawWorld (state: Level) (context: CC) =
     context.fillRect (-1000, -0.1, 2000, 0.2)
 
     // Draw the state
-    for prop in state.Props do
-        Prop.draw prop context
-
     Player.draw state.Player context
     List.iter (fun bullet -> Bullet.draw bullet context) state.Bullets
     List.iter (fun enemy -> Enemy.draw enemy context) state.Enemies
-
+    List.iter (fun prop -> Prop.draw prop context) state.Props
+    List.iter (fun chest -> Chest.draw chest context) state.Chests
 
     // Draw the mouse for debugging.
     let x =

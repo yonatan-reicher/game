@@ -215,8 +215,23 @@ let private enemiesTick (ft: Time.Frame) (state: Level) =
             Enemies = enemies }
 
 
+let private openChests (state: Level) : Level =
+    let shouldBeOpened (chest: Chest) =
+        not chest.Opened
+        && Overlap.circleCircle (Player.circle state.Player) (Chest.circle chest)
+
+    state.Chests
+    |> List.partition shouldBeOpened
+    |> fun (toBeOpened, notOpened) -> List.map Chest.setOpened toBeOpened @ notOpened, List.map Chest.chip toBeOpened
+    |> fun (chests, chips) ->
+        { state with
+            Chests = chests
+            Chips = state.Chips @ chips }
+
+
 let tick' (state: Level) (ft: Time.Frame) =
     state
+    |> openChests
     |> bulletsTick ft
     |> enemiesTick ft
     |> playerTick ft

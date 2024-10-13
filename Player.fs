@@ -127,3 +127,8 @@ let tick chips ({ Position = pos } as player: Player) (ft: Time.Frame) : Player 
         Position = pos + (speed' * ft.Delta * move)
         Direction = Direction.fromSign move.X |> Option.defaultValue player.Direction
         State = advanceState isMoving ft player.State }
+
+
+let circle (player: Player): Circle<m> =
+    { Center = player.Position
+      Radius = radius }
