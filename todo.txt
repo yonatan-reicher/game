@@ -1,0 +1,17 @@
+A minimal level loader
+Add a sound effect
+Camera Shake
+Lighting
+Look into automatic serialization
+Melee enemies
+Pure and functional rendering
+Pure and functional time scaling
+Try making a level
+x 2024-10-13 Try making pixelart just to try a vibe for the game
+x Camera zoom
+x Change timescale according to player movement
+x Delete bullet trail rendering and replace trails with bullet animations
+x Get a sprite for the player (Make sure to draw it flipped!)
+x Let the player shoot bullets in the direction of the mouse
+x Make a player that can move around
+x Redo Time.fs to fix timesteps and allow time scaling, and pausing, and filling lost frames, but only up to some threshold

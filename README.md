@@ -21,23 +21,3 @@ For example, there is Rendering.fs that is completly isloated from the rest
 of the game engine, everything you want to know about how this game renders
 stuff is in that module and that module only. But (for now) it does expose an
 API that requires you to side-effect to draw.
-
-## TODO
-
-- [ ] Get a sprite for the player (Make sure to draw it flipped!)
-- [ ] Try making pixelart just to try a vibe for the game
-- [ ] Camera Shake
-- [ ] Pure and functional rendering
-- [ ] Pure and functional time scaling
-- [ ] Melee enemies
-- [ ] Try making a level
-- [ ] A minimal level loader
-- [ ] Look into automatic serialization
-- [ ] Add a sound effect
-- [ ] Lighting
-- [x] Delete bullet trail rendering and replace trails with bullet animations
-- [x] Camera zoom
-- [x] Change timescale according to player movement
-- [x] Redo Time.fs to fix timesteps and allow time scaling, and pausing, and filling lost frames, but only up to some threshold
-- [x] Let the player shoot bullets in the direction of the mouse
-- [x] Make a player that can move around
