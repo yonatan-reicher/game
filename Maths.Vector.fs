@@ -66,3 +66,6 @@ let moveTo (target: Vec2<'a>) (current: Vec2<'a>) (maxStep: float32<'a>) : Vec2<
     let step = min dist maxStep
     let move = normalize diff
     current + scale step move
+
+
+let lerp (a: Vec2<'a>) (b: Vec2<'a>) (t: float32) = a + scale t (b - a)
