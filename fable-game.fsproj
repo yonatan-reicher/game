@@ -10,6 +10,7 @@
     <Compile Include="Util.fs" />
     <Compile Include="Maths.fs" />
     <Compile Include="Maths.Vector.fs" />
+    <Compile Include="Maths.Random.fs" />
     <Compile Include="Input.fs" />
     <Compile Include="Time.fs" />
     <Compile Include="Rendering.fs" />
