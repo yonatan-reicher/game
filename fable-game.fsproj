@@ -7,25 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Util.fs" />
-    <Compile Include="Maths.fs" />
-    <Compile Include="Maths.Vector.fs" />
-    <Compile Include="Maths.Random.fs" />
-    <Compile Include="Input.fs" />
-    <Compile Include="Time.fs" />
-    <Compile Include="Rendering.fs" />
-    <Compile Include="Camera.fs" />
-    <Compile Include="Sprite.fs" />
-    <Compile Include="BulletTrail.fs" />
-    <Compile Include="Game.State.fs" />
-    <Compile Include="Bullet.fs" />
-    <Compile Include="Player.fs" />
-    <Compile Include="Game.Enemy.fs" />
-    <Compile Include="Prop.fs" />
-    <Compile Include="Game.Chest.fs" />
-    <Compile Include="Game.Tick.fs" />
-    <Compile Include="Game.Draw.fs" />
-    <Compile Include="Main.fs" />
+    <Compile Include="src/Util.fs" />
+    <Compile Include="src/Maths.fs" />
+    <Compile Include="src/Maths.Vector.fs" />
+    <Compile Include="src/Maths.Random.fs" />
+    <Compile Include="src/Input.fs" />
+    <Compile Include="src/Time.fs" />
+    <Compile Include="src/Rendering.fs" />
+    <Compile Include="src/Camera.fs" />
+    <Compile Include="src/Sprite.fs" />
+    <Compile Include="src/BulletTrail.fs" />
+    <Compile Include="src/Game.State.fs" />
+    <Compile Include="src/Bullet.fs" />
+    <Compile Include="src/Player.fs" />
+    <Compile Include="src/Game.Enemy.fs" />
+    <Compile Include="src/Prop.fs" />
+    <Compile Include="src/Game.Chest.fs" />
+    <Compile Include="src/Game.Tick.fs" />
+    <Compile Include="src/Game.Draw.fs" />
+    <Compile Include="src/Main.fs" />
   </ItemGroup>
 
   <ItemGroup>
