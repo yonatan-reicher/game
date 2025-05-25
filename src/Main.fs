@@ -1,8 +1,15 @@
-﻿open Rendering
+﻿(*
+This file is the entry point for the game. It first creates an initial game
+state. Then it connects some input and output handlers which "do" the game.
+*)
+
+
+open Rendering
 open Time
 open Game
 open Maths
 open Util
+
 
 let init =
     Level
@@ -78,22 +85,24 @@ let keyUp (key: Input.Key) (state: State) =
     | GameOver _ -> state
 
 
-let draw (state: State) (context: CanvasContext) = Draw.draw state context
+let private setupRendering state =
+    Rendering.setup { State = state; Draw = Draw.draw }
+let private setupTime state =
+    Time.setup
+        { FrameRate = 60.0f<frame / s>
+          Tick = Tick.tick
+          State = state }
+let private setupInput state =
+    Input.setup
+        { State = state
+          OnMouseDown = mouseDown
+          OnMouseUp = (fun _ -> id)
+          OnKeyUp = keyUp
+          OnKeyDown = (fun _key -> id) }
 
 
+/// This variable holds the current state of the game in any given moment.
 let state = ref init
-Rendering.setup { Draw = draw; State = state }
-
-
-Time.setup
-    { FrameRate = 60.0f<frame / s>
-      Tick = Tick.tick
-      State = state }
-
-
-Input.setup
-    { State = state
-      OnMouseDown = mouseDown
-      OnMouseUp = (fun _ -> id)
-      OnKeyUp = keyUp
-      OnKeyDown = (fun _key -> id) }
+setupRendering state
+setupTime state
+setupInput state
