@@ -241,7 +241,7 @@ let private shootingTick (ft : Time.Frame) (state: Level) =
 
 
 
-let tick' (state: Level) (ft: Time.Frame) =
+let tickLevel (state: Level) (ft: Time.Frame) =
     state
     |> openChests
     |> bulletsTick ft
@@ -254,5 +254,5 @@ let tick' (state: Level) (ft: Time.Frame) =
 
 let tick state (ft: Time.Frame) =
     match state with
-    | Level l -> tick' l ft
+    | Level l -> tickLevel l ft
     | GameOver _ -> state
