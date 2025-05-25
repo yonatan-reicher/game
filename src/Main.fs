@@ -7,6 +7,7 @@ open Util
 let init =
     Level
         { Player = Player.init ()
+          ShootingState = ShootingState.Idle
           Props =
             [ { Position = 1f<m> * vec2 10f 15f
                 Rotation = 1f<rad>
@@ -31,12 +32,11 @@ let init =
 let private mouseDownLevel (pos: vec2<px>) (level: Level) =
     let worldPos = Camera.screenToWorld level.Camera (getContext ()) pos
 
-    let bullet: Bullet =
-        { Position = level.Player.Position
-          Angle = Vector.angle (worldPos - level.Player.Position)
-          Speed = 60.0f<m / s>
-          State = Moving
-          Trail = BulletTrail.emptyTrail }
+    let (bullets, shootingState) =
+        ShootingState.shoot level.Player.Position worldPos level.ShootingState
+        |> function
+            | Some(bullet, state) -> (bullet :: level.Bullets, state)
+            | None -> (level.Bullets, level.ShootingState)
 
     Time.timeScale.Value <- 1f
 
@@ -47,7 +47,8 @@ let private mouseDownLevel (pos: vec2<px>) (level: Level) =
             Left
 
     { level with
-        Bullets = bullet :: level.Bullets
+        Bullets = bullets
+        ShootingState = shootingState
         Player = { level.Player with Direction = dir } }
 
 

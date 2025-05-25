@@ -235,12 +235,19 @@ let private cameraTick (ft: Time.Frame) (state: Level) =
         Camera = Camera.tick ft.Delta state.Camera }
 
 
+let private shootingTick (ft : Time.Frame) (state: Level) =
+    { state with
+        ShootingState = ShootingState.tick ft state.ShootingState }
+
+
+
 let tick' (state: Level) (ft: Time.Frame) =
     state
     |> openChests
     |> bulletsTick ft
     |> enemiesTick ft
     |> playerTick ft
+    |> shootingTick ft
     |> cameraTick ft
     |> Collision.doBulletHits ft
 

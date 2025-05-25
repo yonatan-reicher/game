@@ -20,6 +20,7 @@
     <Compile Include="src/Game.State.fs" />
     <Compile Include="src/Bullet.fs" />
     <Compile Include="src/Player.fs" />
+    <Compile Include="src/Game.ShootingState.fs" />
     <Compile Include="src/Game.Enemy.fs" />
     <Compile Include="src/Prop.fs" />
     <Compile Include="src/Game.Chest.fs" />

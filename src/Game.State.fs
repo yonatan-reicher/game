@@ -85,13 +85,20 @@ type Chest =
       Chip: Chip }
 
 
+[<RequireQualifiedAccess>]
+type ShootingState =
+    | Idle
+    | Recovering of timeLeft: float32<s>
+
+
 type Level =
     { Player: Player
+      ShootingState: ShootingState
       Bullets: Bullet list
       Camera: Camera.Camera
       Props: Prop list
       Chests: Chest list
-      // The equiped chips. Not inside the player structure because we could
+      // The equipped chips. Not inside the player structure because we could
       // for example have the game inside a shop menu or something like that.
       Chips: Chip list
       Enemies: Enemy list }
