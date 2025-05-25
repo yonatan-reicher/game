@@ -3,12 +3,13 @@ module Game.Tick
 open Maths
 open Util
 
-
+(*
 let constrainCameraToPlayer (state: Level) =
     { state with
         Camera =
             { state.Camera with
                 Position = state.Player.Position } }
+                *)
 
 
 let changeExitingToMoving: Bullet -> Bullet =
@@ -229,12 +230,18 @@ let private openChests (state: Level) : Level =
             Chips = state.Chips @ chips }
 
 
+let private cameraTick (ft: Time.Frame) (state: Level) =
+    { state with
+        Camera = Camera.tick ft.Delta state.Camera }
+
+
 let tick' (state: Level) (ft: Time.Frame) =
     state
     |> openChests
     |> bulletsTick ft
     |> enemiesTick ft
     |> playerTick ft
+    |> cameraTick ft
     |> Collision.doBulletHits ft
 
 

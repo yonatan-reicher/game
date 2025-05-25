@@ -3,15 +3,21 @@ module Camera
 open Maths
 
 type Camera =
-    { Position: vec2<meter>
-      Rotation: float32<rad>
-      Width: float32<meter> }
+    { TargetPosition: vec2<meter>
+      ActualPosition: vec2<meter>
+      TargetRotation: float32<rad>
+      ActualRotation: float32<rad>
+      Width: float32<meter>
+      Shake: float32 }
 
 
 let init =
-    { Position = Vector.zero
-      Rotation = 0.0f<rad>
-      Width = 30.0f<m> }
+    { TargetPosition = Vector.zero
+      ActualPosition = Vector.zero
+      TargetRotation = 0.0f<rad>
+      ActualRotation = 0.0f<rad>
+      Width = 30.0f<m>
+      Shake = 0.0f }
 
 
 let height { Width = w } (context: Rendering.CanvasContext) : float32<meter> =
@@ -29,12 +35,18 @@ let metersPerPixel ({ Width = width }: Camera) (context: Rendering.CanvasContext
     width / pixels
 
 
-let apply (camera: Camera) (context: Rendering.CanvasContext) draw: unit =
+let apply (camera: Camera) (context: Rendering.CanvasContext) draw : unit =
     // Scale to the camera width.
     let scale = float32 context.canvas.width * 1f<m> / camera.Width
-    let moveTo = -camera.Position * 1f< / m> + 0.5f * size camera context * 1f< / m>
 
-    Rendering.scaled scale (Rendering.movedTo moveTo (Rendering.rotatedAround Vector.zero -camera.Rotation draw)) context
+    let moveTo =
+        -camera.ActualPosition * 1f< / m> + 0.5f * size camera context * 1f< / m>
+
+    (draw
+     |> Rendering.rotatedAround Vector.zero -camera.ActualRotation
+     |> Rendering.movedTo moveTo
+     |> Rendering.scaled scale)
+        context
 
 
 let screenToWorld (camera: Camera) (context: Rendering.CanvasContext) : vec2<px> -> vec2<m> =
@@ -45,8 +57,8 @@ let screenToWorld (camera: Camera) (context: Rendering.CanvasContext) : vec2<px>
         { X = screen.X - 0.5f * w
           Y = 0.5f * h - screen.Y }
         * metersPerPixel camera context
-        + camera.Position
-        |> Vector.rotateAroundPoint camera.Position camera.Rotation
+        + camera.ActualPosition
+        |> Vector.rotateAroundPoint camera.ActualPosition camera.ActualRotation
 
 
 let worldToScreen (camera: Camera) (context: Rendering.CanvasContext) : vec2<m> -> vec2<px> =
@@ -55,9 +67,30 @@ let worldToScreen (camera: Camera) (context: Rendering.CanvasContext) : vec2<m> 
 
     fun (world: vec2<m>) ->
         world
-        |> Vector.rotateAroundPoint camera.Position (-camera.Rotation)
-        |> fun p -> p - camera.Position
+        |> Vector.rotateAroundPoint camera.ActualPosition (-camera.ActualRotation)
+        |> fun p -> p - camera.ActualPosition
         |> fun p -> p / metersPerPixel camera context
         |> fun p ->
             { X = p.X + 0.5f * w
               Y = 0.5f * h - p.Y }
+
+
+let private lerpToTarget dt (camera: Camera) : Camera =
+    { camera with
+        ActualPosition = Vector.lerp camera.ActualPosition camera.TargetPosition (dt * 1f< / s>)
+        ActualRotation = Maths.lerp camera.ActualRotation camera.TargetRotation (dt * 1f< / s>) }
+
+
+let private shake dt (camera: Camera) : Camera =
+    { camera with
+        ActualPosition = camera.ActualPosition + Random.direction () * camera.Shake * 5f<m / s> * dt
+        ActualRotation = camera.ActualRotation + Random.float32 () * camera.Shake * 0.1f<rad / s> * dt }
+
+
+let private decayShake dt (camera: Camera) : Camera =
+    { camera with
+        Shake = Maths.lerp camera.Shake 0.0f (dt * 1f< / s>) }
+
+
+let tick (dt: float32<s>) (camera: Camera) : Camera =
+    camera |> lerpToTarget dt |> shake dt |> decayShake dt
