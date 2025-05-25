@@ -5,8 +5,6 @@ module Maths
 
 let private Float32WithMeasure = LanguagePrimitives.Float32WithMeasure
 
-let random = System.Random()
-
 [<Struct>]
 type Vec2<[<Measure>] 'a> =
     { X: float32<'a>
