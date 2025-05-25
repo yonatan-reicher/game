@@ -7,6 +7,8 @@ Melee enemies
 Pure and functional rendering
 Pure and functional time scaling
 Try making a level
+Display the cool-down of the player's gun
+Make bullets ignore their shooter
 x 2024-10-13 Try making pixelart just to try a vibe for the game
 x Camera zoom
 x Change timescale according to player movement
