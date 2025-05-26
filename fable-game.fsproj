@@ -25,6 +25,7 @@
     <Compile Include="src/Prop.fs" />
     <Compile Include="src/Game.Chest.fs" />
     <Compile Include="src/Game.Tick.fs" />
+    <Compile Include="src/Game.UI.fs" />
     <Compile Include="src/Game.Draw.fs" />
     <Compile Include="src/Main.fs" />
   </ItemGroup>
