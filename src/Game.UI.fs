@@ -30,6 +30,20 @@ let private drawChip (chip: Chip) =
     | HomingBullets -> drawHomingBulletsChip
 
 
+let private drawShootingState (startX, startY, width, height) ss (context: CanvasContext) =
+    let (percent, color) =
+        match ss with
+        | ShootingState.Idle -> 1f, "rgba(255, 0, 0, 0.4)"
+        | ShootingState.Recovering timeLeft ->
+            1f - (timeLeft / ShootingState.fullWaitTime),
+            "rgba(255, 0, 0, 0.8)"
+
+    context.fillStyle <- Fable.Core.U3.Case1 "rgba(0, 0, 0, 0.2)"
+    context.fillRect (startX, startY, width, height)
+    context.fillStyle <- Fable.Core.U3.Case1 color
+    context.fillRect (startX, startY, width * float percent, height)
+
+
 let draw (state: Level) (context: CanvasContext) : unit =
     // outer box: surrounding box, like borderbox
     // inner box: the box inside the outer box (padding)
@@ -53,3 +67,12 @@ let draw (state: Level) (context: CanvasContext) : unit =
                 (drawChip chip)
                 context)
         state.Chips
+
+    let height = inboxHeight * 0.5f
+    drawShootingState
+        (float margin,
+         float (canvasHeight - margin - outboxHeight - margin - height),
+         float outboxWidth,
+         float height)
+        state.ShootingState
+        context

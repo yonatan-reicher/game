@@ -9,7 +9,8 @@ open Util
 type SS = ShootingState
 
 
-let fullWait : ShootingState = SS.Recovering 1f<s>
+let fullWaitTime = 1f<s>
+let fullWait : ShootingState = SS.Recovering fullWaitTime
 
 
 /// This function returns the result of triggering a shot. Returns some
