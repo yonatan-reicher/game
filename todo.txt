@@ -1,6 +1,5 @@
 A minimal level loader
 Add a sound effect
-Camera Shake
 Lighting
 Look into automatic serialization
 Melee enemies
@@ -9,6 +8,7 @@ Pure and functional time scaling
 Try making a level
 Make bullets ignore their shooter
 Show cool-down for the enemies gun
+2025-05-27 Make camera shake when shooting not when pressing and not shooting
 x 2024-10-13 Try making pixelart just to try a vibe for the game
 x Camera zoom
 x Change timescale according to player movement
@@ -18,3 +18,4 @@ x Let the player shoot bullets in the direction of the mouse
 x Make a player that can move around
 x Redo Time.fs to fix timesteps and allow time scaling, and pausing, and filling lost frames, but only up to some threshold
 x Display the cool-down of the player's gun
+x 2025-05-27 Camera Shake
