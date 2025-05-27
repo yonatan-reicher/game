@@ -232,7 +232,7 @@ let private openChests (state: Level) : Level =
 
 let private cameraTick (ft: Time.Frame) (state: Level) =
     { state with
-        Camera = Camera.tick ft.Delta state.Camera }
+        Camera = Camera.tick ft.UnscaledDelta state.Camera }
 
 
 let private shootingTick (ft : Time.Frame) (state: Level) =
