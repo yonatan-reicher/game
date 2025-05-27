@@ -240,6 +240,11 @@ let private shootingTick (ft : Time.Frame) (state: Level) =
         ShootingState = ShootingState.tick ft state.ShootingState }
 
 
+let private moveCameraToPlayer (state: Level) =
+    { state with
+        Camera = { state.Camera with TargetPosition = state.Player.Position } }
+
+
 
 let tickLevel (state: Level) (ft: Time.Frame) =
     state
@@ -248,6 +253,7 @@ let tickLevel (state: Level) (ft: Time.Frame) =
     |> enemiesTick ft
     |> playerTick ft
     |> shootingTick ft
+    |> moveCameraToPlayer
     |> cameraTick ft
     |> Collision.doBulletHits ft
 
