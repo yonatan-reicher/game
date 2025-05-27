@@ -56,7 +56,8 @@ let private mouseDownLevel (pos: vec2<px>) (level: Level) =
     { level with
         Bullets = bullets
         ShootingState = shootingState
-        Player = { level.Player with Direction = dir } }
+        Player = { level.Player with Direction = dir }
+        Camera = Camera.shake 0.5f level.Camera }
 
 
 let private mouseDown pos state =

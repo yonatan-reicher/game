@@ -77,20 +77,24 @@ let worldToScreen (camera: Camera) (context: Rendering.CanvasContext) : vec2<m> 
 
 let private lerpToTarget dt (camera: Camera) : Camera =
     { camera with
-        ActualPosition = Vector.lerp camera.ActualPosition camera.TargetPosition (dt * 1f< / s>)
+        ActualPosition = Vector.lerp camera.ActualPosition camera.TargetPosition (dt * 5f< / s>)
         ActualRotation = Maths.lerp camera.ActualRotation camera.TargetRotation (dt * 1f< / s>) }
 
 
-let private shake dt (camera: Camera) : Camera =
+let private doShake dt (camera: Camera) : Camera =
     { camera with
         ActualPosition = camera.ActualPosition + Random.direction () * camera.Shake * 5f<m / s> * dt
-        ActualRotation = camera.ActualRotation + Random.float32 () * camera.Shake * 0.1f<rad / s> * dt }
+        ActualRotation = camera.ActualRotation + Random.float32Between -1f 1f * camera.Shake * 0.1f<rad / s> * dt }
 
 
 let private decayShake dt (camera: Camera) : Camera =
     { camera with
-        Shake = Maths.lerp camera.Shake 0.0f (dt * 1f< / s>) }
+        Shake = Maths.lerp camera.Shake 0.0f (dt * 5f< / s>) }
 
 
 let tick (dt: float32<s>) (camera: Camera) : Camera =
-    camera |> lerpToTarget dt |> shake dt |> decayShake dt
+    camera |> lerpToTarget dt |> doShake dt |> decayShake dt
+
+
+let shake (amount: float32) (camera: Camera) : Camera =
+    { camera with Shake = camera.Shake + amount }
