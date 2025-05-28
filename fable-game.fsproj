@@ -34,6 +34,7 @@
     <PackageReference Include="Fable.Browser.Css" Version="2.5.0" />
     <PackageReference Include="Fable.Browser.Dom" Version="2.17.0" />
     <PackageReference Include="Fable.Core" Version="4.3.0" />
+    <PackageReference Include="FSharpPlus" Version="1.7.0" />
   </ItemGroup>
 
 </Project>
