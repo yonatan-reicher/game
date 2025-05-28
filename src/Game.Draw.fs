@@ -36,7 +36,7 @@ let private drawWorld (state: Level) (context: CC) =
 
 
 let drawGameOver (context: CanvasContext) : unit =
-    (text "Game Over! :("
+    (Text.text "Game Over! :("
      |> Text.withSize 64
      |> Text.withColor (Fable.Core.U3.Case1 "white")
      |> Text.withAlignment Text.Align.Center
