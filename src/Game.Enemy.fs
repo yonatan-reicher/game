@@ -7,7 +7,9 @@ open Util
 module Enemy =
     let private shootDelay = 2f<s>
 
-    let initAt pos : Enemy = { Position = pos; ShootDelay = shootDelay }
+    let initAt pos : Enemy =
+        { Position = pos
+          ShootDelay = shootDelay }
 
 
     let draw ({ Position = pos }: Enemy) (context: Rendering.CanvasContext) =
