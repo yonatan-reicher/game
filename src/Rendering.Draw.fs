@@ -9,7 +9,7 @@ type Draw<[<Measure>] 'u, 'a> =
     private
     | Draw of (CanvasContext -> 'a) // This does a side effect
 
-    static member inline Return x = Draw(fun _ -> x)
+    static member inline Return x : Draw<'u, 'a> = Draw(fun _ -> x)
 
     static member inline (>>=)(x, f: 'a -> Draw<'u, 'b>) =
         let (Draw x) = x
