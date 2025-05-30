@@ -56,7 +56,7 @@ module Draw =
         : Draw<'m, unit> =
         fromAction (fun context ->
             context.fillStyle <- U3.Case1 fillStyle
-            context.rect (float x, float y, float width, float height))
+            context.fillRect (float x, float y, float width, float height))
 
     let moveBy (pos: vec2<'m>) (draw: Draw<'m, 'a>) : Draw<'m, 'a> =
         fromAction (fun context ->
