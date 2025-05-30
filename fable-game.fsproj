@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>fable_game</RootNamespace>
   </PropertyGroup>
 
@@ -16,6 +16,7 @@
     <Compile Include="src/Rendering.fs" />
     <Compile Include="src/Rendering.Draw.fs" />
     <Compile Include="src/Rendering.Text.fs" />
+    <Compile Include="src/Draw.Bar.fs" />
     <Compile Include="src/Camera.fs" />
     <Compile Include="src/Sprite.fs" />
     <Compile Include="src/BulletTrail.fs" />
