@@ -15,6 +15,7 @@
     <Compile Include="src/Time.fs" />
     <Compile Include="src/Rendering.fs" />
     <Compile Include="src/Rendering.Draw.fs" />
+    <Compile Include="src/Rendering.Draw.CE.fs" />
     <Compile Include="src/Rendering.Text.fs" />
     <Compile Include="src/Draw.Bar.fs" />
     <Compile Include="src/Camera.fs" />
