@@ -28,6 +28,7 @@ type Draw<[<Measure>] 'u, 'a> =
 
 [<RequireQualifiedAccess>]
 module Draw =
+    let inline ret x = Draw.Return x
     let inline action (x: Draw<_, _>) = x.Action
 
     let inline fromAction action = Draw.FromAction action
