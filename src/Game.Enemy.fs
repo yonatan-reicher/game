@@ -2,6 +2,9 @@ namespace Game
 
 open Maths
 open Util
+open Draw
+open Rendering
+
 
 
 module Enemy =
@@ -12,10 +15,20 @@ module Enemy =
           ShootDelay = shootDelay }
 
 
-    let draw ({ Position = pos }: Enemy) (context: Rendering.CanvasContext) =
+    let draw ({ Position = pos; ShootDelay=s }: Enemy) (context: Rendering.CanvasContext) =
         let r = 0.5
         context.fillStyle <- Fable.Core.U3.Case1 "red"
         context.fillRect (float pos.X - r, float pos.Y - r, 2.0 * r, 2.0 * r)
+
+        { Value = 1f - s / shootDelay
+          Color = "red"
+          BackgroundColor = "gray"
+          Width = 1f<m>
+          Height = 0.2f<m> }
+        |> Bar.draw
+        |> Draw.moveBy (pos + vec2 -0.5f<m> 1f<m>)
+        |> Draw.action
+        <| context
 
 
     let private moveToAimAt (ft: Time.Frame) targetPos (enemy: Enemy) =
