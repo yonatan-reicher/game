@@ -65,3 +65,7 @@ module Sprite =
         |> Rendering.flippedY
         |> Rendering.rotatedAround Vector.zero rotation
         |> Rendering.movedTo (position / 1f<m>)
+
+    // TODO: Name this `draw` and get rid of the old draw
+    let draw_ : SpriteDrawArgs -> Sprite -> Rendering.Draw<m, unit> =
+        fun a s -> Rendering.Draw.fromAction (draw a s)
