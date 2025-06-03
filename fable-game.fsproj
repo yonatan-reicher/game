@@ -22,6 +22,7 @@
     <Compile Include="src/Camera.fs" />
     <Compile Include="src/Sprite.fs" />
     <Compile Include="src/BulletTrail.fs" />
+    <Compile Include="src/Particle.fs" />
     <Compile Include="src/Game.State.fs" />
     <Compile Include="src/Bullet.fs" />
     <Compile Include="src/Player.fs" />
