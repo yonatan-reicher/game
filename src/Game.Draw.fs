@@ -3,6 +3,8 @@ module Game.Draw
 open Rendering
 open Maths
 open Sprite
+open Particle
+open FSharpPlus
 
 
 type private CC = CanvasContext
@@ -24,6 +26,7 @@ let private drawWorld (state: Level) (context: CC) =
     List.iter (fun enemy -> Enemy.draw enemy context) state.Enemies
     List.iter (fun prop -> Prop.draw prop context) state.Props
     List.iter (fun chest -> Chest.draw chest context) state.Chests
+    List.iter (fun p -> Particle.draw p </Draw.action/> context) state.Particles
 
     // Draw the mouse for debugging.
     let x =

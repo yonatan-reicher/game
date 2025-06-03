@@ -2,6 +2,7 @@ module Game.Tick
 
 open Maths
 open Util
+open Particle
 
 (*
 let constrainCameraToPlayer (state: Level) =
@@ -242,7 +243,10 @@ let private shootingTick (ft: Time.Frame) (state: Level) =
         ShootingState = ShootingState.tick ft state.ShootingState }
 
 
+let private particlesTick (ft: Time.Frame) (state: Level) =
     { state with
+        Particles = List.choose (Particle.tick ft.Delta) state.Particles }
+
 
 let private moveCameraToPlayer (state: Level) =
     { state with
@@ -258,6 +262,7 @@ let tickLevel (state: Level) (ft: Time.Frame) =
     |> enemiesTick ft
     |> playerTick ft
     |> shootingTick ft
+    |> particlesTick ft
     |> moveCameraToPlayer
     |> cameraTick ft
     |> Collision.doBulletHits ft

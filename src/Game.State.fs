@@ -2,6 +2,7 @@ namespace Game
 
 open Maths
 open Sprite
+open Particle
 
 
 [<Struct>]
@@ -101,7 +102,8 @@ type Level =
       // The equipped chips. Not inside the player structure because we could
       // for example have the game inside a shop menu or something like that.
       Chips: Chip list
-      Enemies: Enemy list }
+      Enemies: Enemy list
+      Particles: Particle list }
 
 
 type State = 
