@@ -11,6 +11,7 @@
     <Compile Include="src/Maths.fs" />
     <Compile Include="src/Maths.Vector.fs" />
     <Compile Include="src/Maths.Random.fs" />
+    <Compile Include="src/Physics.fs" />
     <Compile Include="src/Input.fs" />
     <Compile Include="src/Time.fs" />
     <Compile Include="src/Rendering.fs" />
