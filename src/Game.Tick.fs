@@ -129,8 +129,10 @@ module Collision =
 
     let private doIgnoredBullets collisionObjects (state: HitDetectionState) =
         state.BulletsLeft
+        // Find collisions that happened but were ignored.
         |> List.partition (fun x -> List.exists (collides x) collisionObjects)
         |> fun (ignoredCollisions, notColliding) ->
+            // Assert that ignored collisions were actually ignored.
             assert List.forall shouldBeIgnored ignoredCollisions
             // assert List.forall (not << shouldBeIgnored) notColliding
 
@@ -235,15 +237,18 @@ let private cameraTick (ft: Time.Frame) (state: Level) =
         Camera = Camera.tick ft.UnscaledDelta state.Camera }
 
 
-let private shootingTick (ft : Time.Frame) (state: Level) =
+let private shootingTick (ft: Time.Frame) (state: Level) =
     { state with
         ShootingState = ShootingState.tick ft state.ShootingState }
 
 
+    { state with
+
 let private moveCameraToPlayer (state: Level) =
     { state with
-        Camera = { state.Camera with TargetPosition = state.Player.Position } }
-
+        Camera =
+            { state.Camera with
+                TargetPosition = state.Player.Position } }
 
 
 let tickLevel (state: Level) (ft: Time.Frame) =
