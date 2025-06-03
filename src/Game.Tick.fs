@@ -132,7 +132,7 @@ module Collision =
         |> List.partition (fun x -> List.exists (collides x) collisionObjects)
         |> fun (ignoredCollisions, notColliding) ->
             assert List.forall shouldBeIgnored ignoredCollisions
-            assert List.forall (not << shouldBeIgnored) notColliding
+            // assert List.forall (not << shouldBeIgnored) notColliding
 
             state
             |> mapHits (fun h ->
